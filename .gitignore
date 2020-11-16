@@ -1,0 +1,8 @@
+.vs\*
+packages\*
+TestResults\*
+PT_Task1\bin\*
+PT_Task1\obj\*
+Task1_Test\bin\*
+Task1_Test\obj\*
+Task1_Test\obj\Properties
