@@ -43,10 +43,6 @@ namespace PT_Task1.DataLayer
             } throw new ILibrary.NoSuchBook_Exception();
         }
 
-        public void ChangeActiveBookStateTo(Book.BookState bookState) {
-            this.activeBook.state = bookState;    
-        }
-
         public void SelectUser(string username) {
             foreach (User user in userList) {
                 if (user.Username == username) this.activeUser = user;
@@ -66,6 +62,17 @@ namespace PT_Task1.DataLayer
         public void RemoveEntry(string title, string author, bool hardback)
         {
             throw new NotImplementedException();
+        }
+
+        public void ChangeActiveBookStateTo(Book.BookState bookState)
+        {
+            this.activeBook.state = bookState;
+        }
+
+        public void AssignTheBookToTheUser()
+        {
+            if (this.activeUser.BorrowLimit <= this.activeUser.borrowedBooks.Count) throw new ILibrary.LimitReached_Exception();
+            this.activeUser.borrowedBooks.Add(activeBook);
         }
     }
 }

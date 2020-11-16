@@ -11,6 +11,7 @@ namespace PT_Task1.DataLayer
 
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState);
         public void ChangeActiveBookStateTo(Book.BookState bookState);
+        public void AssignTheBookToTheUser();
 
         public void SelectUser(string username);
 
@@ -19,5 +20,6 @@ namespace PT_Task1.DataLayer
 
         class NoSuchBook_Exception : Exception { };
         class NoSuchUser_Exception : Exception { };
+        class LimitReached_Exception : Exception { };
     }
 }
