@@ -23,14 +23,14 @@ namespace PT_Task1.LogicLayer
             }
             catch (ILibrary.NoSuchUser_Exception)
             {
-                throw new ServiceException();
+                throw new Login_NoSuchUser_Exception();
             }
         }
 
         public void RentBook(string title, string author, bool hardback)
         {
-            if (!library.CheckIfEntryExists(title, author, hardback)) throw new ServiceException();
-            if (!library.CanIBorrow()) throw new ServiceException();
+            if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
+            if (!library.CanIBorrow()) throw new NotAppropriatePermits_Exception();
             try
             {
                 library.SelectBook(title, author, hardback, Book.BookState.AVAILABLE);
@@ -41,17 +41,17 @@ namespace PT_Task1.LogicLayer
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
-                throw new ServiceException();
+                throw new NonExistingBook_Exception();
             }
             catch (ILibrary.LimitReached_Exception)
             {
-                throw new ServiceException();
+                throw new LimitBreached_Exception();
             }
         }
 
         public void RentReservedBook(string title, string author, bool hardback)
         {
-            if (!library.CheckIfEntryExists(title, author, hardback)) throw new ServiceException();
+            if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
             try
             {
                 library.SelectBook(title, author, hardback, Book.BookState.RESERVED, LoggedInUser);
@@ -60,17 +60,17 @@ namespace PT_Task1.LogicLayer
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
-                throw new ServiceException();
+                throw new NonExistingBook_Exception();
             }
             catch (ILibrary.LimitReached_Exception)
             {
-                throw new ServiceException();
+                throw new LimitBreached_Exception();
             }
         }
 
         public void ReturnBook(string title, string author, bool hardback)
         {
-            if (!library.CheckIfEntryExists(title, author, hardback)) throw new ServiceException();
+            if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
             try
             {
                 library.SelectBook(title, author, hardback, Book.BookState.BORROWED, LoggedInUser);
@@ -81,13 +81,13 @@ namespace PT_Task1.LogicLayer
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
-                throw new ServiceException();
+                throw new NonExistingBook_Exception();
             }
         }
 
         public void ReserveBook(string title, string author, bool hardback)
         {
-            if (!library.CheckIfEntryExists(title, author, hardback)) throw new ServiceException();
+            if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
             if (!library.CanIReserve()) throw new ServiceException();
             try
             {
@@ -114,7 +114,7 @@ namespace PT_Task1.LogicLayer
                     }
                     catch (ILibrary.NoSuchBook_Exception)
                     {
-                        throw new ServiceException();
+                        throw new NonExistingBook_Exception();
                     }
                 }
             }
@@ -122,13 +122,13 @@ namespace PT_Task1.LogicLayer
 
         public void AddCatalogEntry(string title, string author, bool hardback)
         {
-            if (!library.AmIAdmin()) throw new ServiceException();
+            if (!library.AmIAdmin()) throw new NotAppropriatePermits_Exception();
             if (!library.CheckIfEntryExists(title, author, hardback)) library.AddEntry(title, author, hardback);
         }
 
         public void RemoveCatalogEntry(string title, string author, bool hardback)
         {
-            if (!library.AmIAdmin()) throw new ServiceException();
+            if (!library.AmIAdmin()) throw new NotAppropriatePermits_Exception();
             if (library.CheckIfEntryExists(title, author, hardback))
             {
                 library.RemoveAllBooks(title, author, hardback);
@@ -138,7 +138,7 @@ namespace PT_Task1.LogicLayer
 
         public void AddBook(string title, string author, bool hardback)
         {
-            if (!library.AmIAdmin()) throw new ServiceException();
+            if (!library.AmIAdmin()) throw new NotAppropriatePermits_Exception();
             AddCatalogEntry(title, author, hardback);
             library.AddBook(title, author, hardback);
             library.SelectBook(title, author, hardback, Book.BookState.AVAILABLE);
@@ -147,7 +147,7 @@ namespace PT_Task1.LogicLayer
 
         public void RemoveBook(string title, string author, bool hardback)
         {
-            if (!library.AmIAdmin()) throw new ServiceException();
+            if (!library.AmIAdmin()) throw new NotAppropriatePermits_Exception();
             try
             {
                 library.SelectBook(title, author, hardback, Book.BookState.AVAILABLE);
@@ -156,10 +156,15 @@ namespace PT_Task1.LogicLayer
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
-                throw new ServiceException();
+                throw new NonExistingBook_Exception();
             }
         }
 
         public class ServiceException : Exception { };
+        public class Login_NoSuchUser_Exception : ServiceException { };
+        public class NoSuchEntry_Exception : ServiceException { };
+        public class NotAppropriatePermits_Exception : ServiceException { };
+        public class NonExistingBook_Exception : ServiceException { };
+        public class LimitBreached_Exception : ServiceException { };
     }
 }

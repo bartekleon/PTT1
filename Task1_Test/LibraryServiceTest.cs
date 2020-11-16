@@ -21,20 +21,20 @@ namespace Task1_Test
         public void RentBook_Test()
         {
             ls.Login("White");
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", true));
+            Assert.ThrowsException<LibraryService.NoSuchEntry_Exception>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", true));
 
             ls.RentBook("On the Bright Side", "Hendrik Groen", false);
             l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.BORROWED, "White");
             Assert.AreEqual(l.eventHistory[0].type, Event.EventType.RENT_A_BOOK);
 
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
+            Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
         }
 
         [TestMethod]
         public void RentBook_UserNotAllowedToBorrow_Test()
         {
             ls.Login("Red");
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
+            Assert.ThrowsException<LibraryService.NotAppropriatePermits_Exception>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
         }
 
         [TestMethod]
@@ -45,14 +45,14 @@ namespace Task1_Test
             {
                 ls.RentBook("Pride and Prejudice", "Jane Austin", false);
             }
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.RentBook("Pride and Prejudice", "Jane Austin", false));
+            Assert.ThrowsException<LibraryService.NotAppropriatePermits_Exception>(() => ls.RentBook("Pride and Prejudice", "Jane Austin", false));
         }
 
         [TestMethod]
         public void RentBook_NonExistingBook_Test()
         {
             ls.Login("White");
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.RentBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
+            Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.RentBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
         }
 
         [TestMethod]
@@ -71,7 +71,7 @@ namespace Task1_Test
         public void ReturnBook_UserNotOwningTheBook_Test()
         {
             ls.Login("Black");
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.ReturnBook("Pride and Prejudice", "Jane Austin", false));
+            Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.ReturnBook("Pride and Prejudice", "Jane Austin", false));
         }
 
         [TestMethod]
@@ -104,7 +104,7 @@ namespace Task1_Test
         public void ReserveBook_UserNotAllowedToReserve_Test()
         {
             ls.Login("Blue");
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.ReturnBook("Pride and Prejudice", "Jane Austin", false));
+            Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.ReturnBook("Pride and Prejudice", "Jane Austin", false));
         }
 
         [TestMethod]
@@ -129,7 +129,7 @@ namespace Task1_Test
             ls.ReserveBook("On the Bright Side", "Hendrik Groen", false);
 
             ls.Login("Blue");
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
+            Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
         }
 
         [TestMethod]
@@ -152,7 +152,7 @@ namespace Task1_Test
         public void ReserveBook_NonExistingBook_Test()
         {
             ls.Login("White");
-            Assert.ThrowsException<LibraryService.ServiceException>(() => ls.ReserveBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
+            Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.ReserveBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
         }
 
         [TestMethod]

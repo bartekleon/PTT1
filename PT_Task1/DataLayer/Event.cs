@@ -1,6 +1,4 @@
-﻿using System.Collections.Generic;
-
-namespace PT_Task1.DataLayer
+﻿namespace PT_Task1.DataLayer
 {
     public class Event
     {
@@ -8,7 +6,8 @@ namespace PT_Task1.DataLayer
         public readonly User actor;
         public readonly EventType type;
 
-        public Event(CatalogEntry entry, User actor, EventType type) {
+        public Event(CatalogEntry entry, User actor, EventType type)
+        {
             this.bookAffected = entry;
             this.actor = actor;
             this.type = type;
