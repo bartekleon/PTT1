@@ -55,7 +55,7 @@
     <Compile Include="DataLayerTest.cs" />
     <Compile Include="Properties\AssemblyInfo.cs" />
     <Compile Include="LogicLayerTest.cs" />
-    <Compile Include="LIbraryTest.cs" />
+    <Compile Include="LibraryTest.cs" />
   </ItemGroup>
   <ItemGroup>
     <None Include="packages.config" />
