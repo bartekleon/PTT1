@@ -1,9 +1,0 @@
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\bin\Debug\netstandard2.0\PT_Task1.deps.json
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\bin\Debug\netstandard2.0\PT_Task1.dll
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\bin\Debug\netstandard2.0\PT_Task1.pdb
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\obj\Debug\netstandard2.0\PT_Task1.csprojAssemblyReference.cache
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\obj\Debug\netstandard2.0\PT_Task1.AssemblyInfoInputs.cache
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\obj\Debug\netstandard2.0\PT_Task1.AssemblyInfo.cs
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\obj\Debug\netstandard2.0\PT_Task1.csproj.CoreCompileInputs.cache
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\obj\Debug\netstandard2.0\PT_Task1.dll
-D:\Arcyelh\Se'marafamni lém\3\karaktirs\PT_Task1\PT_Task1\obj\Debug\netstandard2.0\PT_Task1.pdb
