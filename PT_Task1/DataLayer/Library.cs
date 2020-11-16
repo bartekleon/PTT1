@@ -3,18 +3,18 @@ using System.Collections.Generic;
 
 namespace PT_Task1.DataLayer
 {
-    class Library : ILibrary
+    public class Library : ILibrary
     {
-        public List<User> userList;
-        public List<Book> bookList;
-        public List<Event> eventHistory;
+        public readonly List<User> userList = new List<User>();
+        public readonly List<Book> bookList = new List<Book>();
+        public readonly List<Event> eventHistory = new List<Event>();
 
         private Book activeBook;
         private User activeUser;
 
-        public void AddBook(CatalogEntry type)
+        public void AddBook(CatalogEntry entry)
         {
-            throw new NotImplementedException();
+            bookList.Add(new Book(entry));
         }
 
         public void AddEntry(string title, string author, bool hardback)

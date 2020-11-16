@@ -7,10 +7,10 @@ namespace PT_Task1.DataLayer
         public string Username { get; private set; }
 
         public int BorrowLimit { get; private set; } = 0;
-        public List<Book> borrowedBooks = new List<Book>();
+        public readonly List<Book> borrowedBooks = new List<Book>();
 
         public int ReserveLimit { get; private set; } = 0;
-        public List<Book> reservedBooks = new List<Book>();
+        public readonly List<Book> reservedBooks = new List<Book>();
 
         public User(string username, bool canBorrow, bool canReserve) {
             this.Username = username;

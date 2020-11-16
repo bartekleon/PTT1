@@ -10,7 +10,7 @@ namespace Task1_Test
         [TestMethod]
         public void TestMethod1() {
             Book yeiryom = new Book(Catalog.entries[1]);
-            Assert.AreEqual(yeiryom.description.author, "Hendrik Groen");
+            Assert.AreEqual(yeiryom.Description.Author, "Hendrik Groen");
             Assert.AreEqual(yeiryom.state, Book.BookState.AVAILABLE);
         }
     }

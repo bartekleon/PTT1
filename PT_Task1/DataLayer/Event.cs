@@ -2,9 +2,9 @@
 
 namespace PT_Task1.DataLayer
 {
-    class Event
+    public class Event
     {
-        public List<Book> booksAffected;
+        public readonly List<Book> booksAffected = new List<Book>();
         public User actor;
 
         public enum EventType {
