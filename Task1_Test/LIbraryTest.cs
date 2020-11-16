@@ -37,9 +37,26 @@ namespace Task1_Test
 
             library.AddBook(catalogEntry);
             int temp = library.bookList.Count;
-            library.RemoveBook(catalogEntry);
+
+            library.SelectBook("hello", "world", true, Book.BookState.AVAILABLE);
+            library.RemoveTheBook();
 
             Assert.AreEqual(library.bookList.Count, temp - 1);
+        }
+
+        [TestMethod]
+        public void TestRemoveAllBooks()
+        {
+            CatalogEntry catalogEntry = new CatalogEntry("hello", "world", true);
+
+            library.AddBook(catalogEntry);
+            library.AddBook(catalogEntry);
+            int temp = library.bookList.Count;
+
+            library.SelectBook("hello", "world", true, Book.BookState.AVAILABLE);
+            library.RemoveAllBooks("hello", "world", true);
+
+            Assert.AreEqual(library.bookList.Count, temp - 2);
         }
 
         [TestMethod]

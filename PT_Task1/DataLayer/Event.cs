@@ -4,8 +4,15 @@ namespace PT_Task1.DataLayer
 {
     public class Event
     {
-        public readonly List<Book> booksAffected = new List<Book>();
-        public User actor;
+        public readonly CatalogEntry bookAffected;
+        public readonly User actor;
+        public readonly EventType type;
+
+        public Event(CatalogEntry entry, User actor, EventType type) {
+            this.bookAffected = entry;
+            this.actor = actor;
+            this.type = type;
+        }
 
         public enum EventType
         {

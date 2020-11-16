@@ -13,6 +13,10 @@ namespace PT_Task1.DataLayer
 
         public Library()
         {
+            this.AddEntry("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
+            this.AddEntry("On the Bright Side", "Hendrik Groen", false);
+            this.AddEntry("Pride and Prejudice", "Jane Austin", false);
+
             this.AddBook(Catalog.entries[1]);
 
             this.AddBook(Catalog.entries[2]);
@@ -27,11 +31,16 @@ namespace PT_Task1.DataLayer
             this.userList.Add(new User("Red", false, false));
             this.userList.Add(new User("Black", true, true));
             this.userList.Add(new User("Blue", true, false));
+            this.userList.Add(new User("Gold", true, true, true));
         }
 
         public void AddBook(CatalogEntry entry)
         {
             bookList.Add(new Book(entry));
+        }
+        public void AddBook(string title, string author, bool hardback)
+        {
+            bookList.Add(new Book(FindEntry(title, author, hardback)));
         }
 
         public void AddEntry(string title, string author, bool hardback)
@@ -96,16 +105,21 @@ namespace PT_Task1.DataLayer
             throw new ILibrary.NoSuchUser_Exception();
         }
 
-        public void RemoveBook(CatalogEntry entry)
+        public void RemoveTheBook()
         {
             foreach (Book book in bookList)
             {
-                if (book.Description.Equals(entry))
+                if (book == this.activeBook)
                 {
                     bookList.Remove(book);
                     break;
                 }
             }
+        }
+
+        public void RemoveAllBooks(string title, string author, bool hardback)
+        {
+            bookList.RemoveAll(entry => entry.Description.Equals(new CatalogEntry(title, author, hardback)));
         }
 
         public void RemoveEntry(int which)
@@ -170,6 +184,27 @@ namespace PT_Task1.DataLayer
         public bool CanIReserve()
         {
             return (this.activeUser.ReserveLimit > this.activeUser.reservedBooks.Count);
+        }
+
+        public bool AmIAdmin()
+        {
+            return (this.activeUser.isAdmin);
+        }
+
+        private CatalogEntry FindEntry(string title, string author, bool hardback)
+        {
+            foreach (CatalogEntry entry in Catalog.entries)
+            {
+                if (entry.Title == title
+                    && entry.Author == author
+                    && entry.Hardback == hardback) return entry;
+            }
+            throw new ILibrary.NoSuchEntry_Exception();
+        }
+
+        public void LogEvent(Event.EventType type)
+        {
+            eventHistory.Add(new Event(activeBook.Description, activeUser, type));
         }
     }
 }

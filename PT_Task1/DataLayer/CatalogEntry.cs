@@ -12,5 +12,20 @@
             this.Author = author;
             this.Hardback = hardback;
         }
+
+       public override bool Equals(object obj)
+        {
+            if (obj == null || GetType() != obj.GetType())
+            {
+                return false;
+            }
+
+            CatalogEntry that = (CatalogEntry)obj;
+
+            return (this.Title == that.Title
+                && this.Author == that.Author
+                && this.Hardback == that.Hardback);
+        }
+
     }
 }

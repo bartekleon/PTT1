@@ -5,7 +5,7 @@ using PT_Task1.LogicLayer;
 namespace Task1_Test
 {
     [TestClass]
-    public class LogicServiceTest
+    public class LibraryServiceTest
     {
         Library l;
         LibraryService ls;
@@ -25,6 +25,7 @@ namespace Task1_Test
 
             ls.RentBook("On the Bright Side", "Hendrik Groen", false);
             l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.BORROWED, "White");
+            Assert.AreEqual(l.eventHistory[0].type, Event.EventType.RENT_A_BOOK);
 
             Assert.ThrowsException<LibraryService.ServiceException>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
         }
@@ -152,6 +153,42 @@ namespace Task1_Test
         {
             ls.Login("White");
             Assert.ThrowsException<LibraryService.ServiceException>(() => ls.ReserveBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
+        }
+
+        [TestMethod]
+        public void AddAndRemoveBooks_Test()
+        {
+            ls.Login("Gold");
+            Assert.ThrowsException<ILibrary.NoSuchBook_Exception>(() =>
+                l.SelectBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true, Book.BookState.AVAILABLE));
+
+            int temp = l.bookList.Count;
+            ls.AddBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
+            l.SelectBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true, Book.BookState.AVAILABLE);
+            Assert.AreEqual(l.bookList.Count, temp + 1);
+
+            l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.AVAILABLE);
+            ls.RemoveBook("On the Bright Side", "Hendrik Groen", false);
+            Assert.ThrowsException<ILibrary.NoSuchBook_Exception>(() =>
+                l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.AVAILABLE));
+        }
+
+        [TestMethod]
+        public void AddAndRemoveEntries_Test()
+        {
+            ls.Login("Gold");
+            Assert.IsFalse(l.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
+            int temp = l.bookList.Count;
+
+            ls.AddCatalogEntry("The Tempest", "William Shakespeare", false);
+            Assert.IsTrue(l.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
+
+            ls.AddBook("The Tempest", "William Shakespeare", false);
+            Assert.AreEqual(l.bookList.Count, temp + 1);
+
+            ls.RemoveCatalogEntry("The Tempest", "William Shakespeare", false);
+            Assert.AreEqual(l.bookList.Count, temp);
+            Assert.IsFalse(l.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
         }
 
 
