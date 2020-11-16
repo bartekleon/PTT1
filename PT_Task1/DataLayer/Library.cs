@@ -49,19 +49,33 @@ namespace PT_Task1.DataLayer
             } throw new ILibrary.NoSuchUser_Exception();
         }
 
-        public void RemoveBook(CatalogEntry type)
+        public void RemoveBook(CatalogEntry entry)
         {
-            throw new NotImplementedException();
+            foreach(Book book in bookList)
+            {
+                if(book.Description.Equals(entry))
+                {
+                    bookList.Remove(book);
+                    break;
+                }
+            }
         }
 
         public void RemoveEntry(int which)
         {
-            throw new NotImplementedException();
+            Catalog.entries.RemoveAt(which);
         }
 
         public void RemoveEntry(string title, string author, bool hardback)
         {
-            throw new NotImplementedException();
+            foreach (CatalogEntry entry in Catalog.entries)
+            {
+                if (entry.Title == title && entry.Author == author && entry.Hardback == hardback)
+                {
+                    Catalog.entries.Remove(entry);
+                    break;
+                }
+            }
         }
 
         public void ChangeActiveBookStateTo(Book.BookState bookState)
