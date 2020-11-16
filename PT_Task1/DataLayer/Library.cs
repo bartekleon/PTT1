@@ -1,5 +1,4 @@
-﻿using System;
-using System.Collections.Generic;
+﻿using System.Collections.Generic;
 
 namespace PT_Task1.DataLayer
 {
@@ -14,7 +13,6 @@ namespace PT_Task1.DataLayer
 
         public Library()
         {
-            this.AddBook(Catalog.entries[0]);
             this.AddBook(Catalog.entries[1]);
 
             this.AddBook(Catalog.entries[2]);
@@ -25,8 +23,10 @@ namespace PT_Task1.DataLayer
             this.AddBook(Catalog.entries[2]);
             this.AddBook(Catalog.entries[2]);
 
-            this.userList.Add(new User("Myself", true, true));
-            this.userList.Add(new User("Other", false, false));
+            this.userList.Add(new User("White", true, true));
+            this.userList.Add(new User("Red", false, false));
+            this.userList.Add(new User("Black", true, true));
+            this.userList.Add(new User("Blue", true, false));
         }
 
         public void AddBook(CatalogEntry entry)
@@ -50,12 +50,6 @@ namespace PT_Task1.DataLayer
 
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState)
         {
-            if (bookState == Book.BookState.BORROWED)
-            {
-                SelectBook(title, author, hardback, bookState, this.activeUser.Username);
-                return;
-            }
-
             foreach (Book book in bookList)
             {
                 if (book.Description.Title == title
@@ -131,23 +125,51 @@ namespace PT_Task1.DataLayer
             }
         }
 
-        public void ChangeActiveBookStateTo(Book.BookState bookState)
+        public void ChangeTheBookStateTo(Book.BookState bookState)
         {
             this.activeBook.state = bookState;
         }
 
         public void AssignTheBookToTheUser()
         {
-            if (this.activeUser.BorrowLimit <= this.activeUser.borrowedBooks.Count) throw new ILibrary.LimitReached_Exception();
             this.activeUser.borrowedBooks.Add(activeBook);
+        }
+
+        public void AssignTheUserToTheBook()
+        {
             this.activeBook.CurrentOwner = this.activeUser;
         }
 
         public void UnassignTheBook()
         {
-            if (this.activeBook.CurrentOwner != this.activeUser) throw new Exception();
+            if (this.activeBook.CurrentOwner != this.activeUser) throw new ILibrary.NotYourBook_Exception();
             this.activeUser.borrowedBooks.Remove(activeBook);
             this.activeBook.CurrentOwner = null;
+        }
+
+        public void AddTheUserToQueue()
+        {
+            this.activeBook.reservationQueue.Enqueue(activeUser);
+        }
+
+        public void PassTheBookDownTheQueue()
+        {
+            if (this.activeBook.reservationQueue.Count > 0 && this.activeBook.state == Book.BookState.AVAILABLE)
+            {
+                this.activeBook.CurrentOwner = this.activeBook.reservationQueue.Dequeue();
+                this.activeBook.state = Book.BookState.RESERVED;
+
+            }
+        }
+
+        public bool CanIBorrow()
+        {
+            return (this.activeUser.BorrowLimit > this.activeUser.borrowedBooks.Count);
+        }
+
+        public bool CanIReserve()
+        {
+            return (this.activeUser.ReserveLimit > this.activeUser.reservedBooks.Count);
         }
     }
 }
