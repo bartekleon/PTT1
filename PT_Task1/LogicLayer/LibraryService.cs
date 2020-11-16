@@ -131,6 +131,16 @@ namespace PT_Task1.LogicLayer
             if (!library.AmIAdmin()) throw new NotAppropriatePermits_Exception();
             if (library.CheckIfEntryExists(title, author, hardback))
             {
+                try
+                {
+                    library.SelectBook(title, author, hardback);
+                    for (int i = 0; i < library.CountBooks(title, author, hardback); i++)
+                    {
+                        library.LogEvent(Event.EventType.REMOVE_A_BOOK);
+                    }
+                }
+                catch (ILibrary.NoSuchBook_Exception) { }
+
                 library.RemoveAllBooks(title, author, hardback);
                 library.RemoveEntry(title, author, hardback);
             }

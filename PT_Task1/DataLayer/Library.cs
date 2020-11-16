@@ -57,6 +57,21 @@ namespace PT_Task1.DataLayer
             return false;
         }
 
+        public void SelectBook(string title, string author, bool hardback)
+        {
+            foreach (Book book in bookList)
+            {
+                if (book.Description.Title == title
+                    && book.Description.Author == author
+                    && book.Description.Hardback == hardback)
+                {
+
+                    this.activeBook = book;
+                    return;
+                }
+            }
+            throw new ILibrary.NoSuchBook_Exception();
+        }
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState)
         {
             foreach (Book book in bookList)
@@ -73,7 +88,6 @@ namespace PT_Task1.DataLayer
             }
             throw new ILibrary.NoSuchBook_Exception();
         }
-
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState, string ownerUsername)
         {
             foreach (Book book in bookList)
@@ -90,6 +104,18 @@ namespace PT_Task1.DataLayer
                 }
             }
             throw new ILibrary.NoSuchBook_Exception();
+        }
+
+        public int CountBooks(string title, string author, bool hardback)
+        {
+            int result = 0;
+            foreach (Book book in bookList)
+            {
+                if (book.Description.Title == title
+                    && book.Description.Author == author
+                    && book.Description.Hardback == hardback) result++;
+            }
+            return result;
         }
 
         public void SelectUser(string username)
@@ -119,6 +145,7 @@ namespace PT_Task1.DataLayer
 
         public void RemoveAllBooks(string title, string author, bool hardback)
         {
+
             bookList.RemoveAll(entry => entry.Description.Equals(new CatalogEntry(title, author, hardback)));
         }
 
@@ -206,5 +233,7 @@ namespace PT_Task1.DataLayer
         {
             eventHistory.Add(new Event(activeBook.Description, activeUser, type));
         }
+
+
     }
 }

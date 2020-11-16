@@ -9,8 +9,10 @@ namespace PT_Task1.DataLayer
         public bool CanIReserve();
         public bool AmIAdmin();
 
+        public void SelectBook(string title, string author, bool hardback);
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState);
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState, string ownerUsername);
+        public int CountBooks(string title, string author, bool hardback);
         public void ChangeTheBookStateTo(Book.BookState bookState);
         public void AssignTheBookToTheUser();
         public void AssignTheUserToTheBook();

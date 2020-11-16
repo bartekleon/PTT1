@@ -26,6 +26,8 @@ namespace Task1_Test
             ls.RentBook("On the Bright Side", "Hendrik Groen", false);
             l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.BORROWED, "White");
             Assert.AreEqual(l.eventHistory[0].type, Event.EventType.RENT_A_BOOK);
+            Assert.AreEqual(l.eventHistory[0].bookAffected.Title, "On the Bright Side");
+            Assert.AreEqual(l.eventHistory[0].actor.Username, "White");
 
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
         }
@@ -35,6 +37,7 @@ namespace Task1_Test
         {
             ls.Login("Red");
             Assert.ThrowsException<LibraryService.NotAppropriatePermits_Exception>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
+            Assert.AreEqual(l.eventHistory.Count, 0);
         }
 
         [TestMethod]
@@ -44,6 +47,9 @@ namespace Task1_Test
             for (int i = 1; i <= 6; i++)
             {
                 ls.RentBook("Pride and Prejudice", "Jane Austin", false);
+                Assert.AreEqual(l.eventHistory[i - 1].type, Event.EventType.RENT_A_BOOK);
+                Assert.AreEqual(l.eventHistory[i - 1].actor.Username, "White");
+                Assert.AreEqual(l.eventHistory[i - 1].bookAffected.Title, "Pride and Prejudice");
             }
             Assert.ThrowsException<LibraryService.NotAppropriatePermits_Exception>(() => ls.RentBook("Pride and Prejudice", "Jane Austin", false));
         }
@@ -53,6 +59,7 @@ namespace Task1_Test
         {
             ls.Login("White");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.RentBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
+            Assert.AreEqual(l.eventHistory.Count, 0);
         }
 
         [TestMethod]
@@ -63,6 +70,10 @@ namespace Task1_Test
             l.SelectBook("Pride and Prejudice", "Jane Austin", false, Book.BookState.BORROWED, "White");
 
             ls.ReturnBook("Pride and Prejudice", "Jane Austin", false);
+            Assert.AreEqual(l.eventHistory[1].type, Event.EventType.BOOK_RETURN);
+            Assert.AreEqual(l.eventHistory[1].actor.Username, "White");
+            Assert.AreEqual(l.eventHistory[1].bookAffected.Title, "Pride and Prejudice");
+
             Assert.ThrowsException<ILibrary.NoSuchBook_Exception>(()
                 => l.SelectBook("Pride and Prejudice", "Jane Austin", false, Book.BookState.BORROWED, "White"));
         }
@@ -72,6 +83,7 @@ namespace Task1_Test
         {
             ls.Login("Black");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.ReturnBook("Pride and Prejudice", "Jane Austin", false));
+            Assert.AreEqual(l.eventHistory.Count, 0);
         }
 
         [TestMethod]
@@ -87,6 +99,10 @@ namespace Task1_Test
             l.SelectBook("Pride and Prejudice", "Jane Austin", false, Book.BookState.BORROWED, "Black");
 
             ls.ReturnBook("Pride and Prejudice", "Jane Austin", false);
+
+            Assert.AreEqual(l.eventHistory[2].type, Event.EventType.BOOK_RETURN);
+            Assert.AreEqual(l.eventHistory[2].actor.Username, "Black");
+            Assert.AreEqual(l.eventHistory[2].bookAffected.Title, "Pride and Prejudice");
             l.SelectBook("Pride and Prejudice", "Jane Austin", false, Book.BookState.BORROWED, "White");
             Assert.ThrowsException<ILibrary.NoSuchBook_Exception>(() =>
                 l.SelectBook("Pride and Prejudice", "Jane Austin", false, Book.BookState.BORROWED, "Black"));
@@ -97,6 +113,9 @@ namespace Task1_Test
         {
             ls.Login("White");
             ls.ReserveBook("Pride and Prejudice", "Jane Austin", false);
+            Assert.AreEqual(l.eventHistory[0].type, Event.EventType.RESERVATION);
+            Assert.AreEqual(l.eventHistory[0].actor.Username, "White");
+            Assert.AreEqual(l.eventHistory[0].bookAffected.Title, "Pride and Prejudice");
             l.SelectBook("Pride and Prejudice", "Jane Austin", false, Book.BookState.RESERVED, "White");
         }
 
@@ -118,6 +137,10 @@ namespace Task1_Test
 
             ls.Login("White");
             ls.RentReservedBook("On the Bright Side", "Hendrik Groen", false);
+            Assert.AreEqual(l.eventHistory[2].type, Event.EventType.RENT_A_BOOK);
+            Assert.AreEqual(l.eventHistory[2].actor.Username, "White");
+            Assert.AreEqual(l.eventHistory[2].bookAffected.Title, "On the Bright Side");
+
             ls.ReturnBook("On the Bright Side", "Hendrik Groen", false);
             l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.RESERVED, "Black");
         }
@@ -130,6 +153,7 @@ namespace Task1_Test
 
             ls.Login("Blue");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.RentBook("On the Bright Side", "Hendrik Groen", false));
+            Assert.AreEqual(l.eventHistory.Count, 1);
         }
 
         [TestMethod]
@@ -146,6 +170,10 @@ namespace Task1_Test
             ls.Login("Black");
             ls.ReturnBook("On the Bright Side", "Hendrik Groen", false);
             l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.RESERVED, "White");
+            Assert.AreEqual(l.eventHistory[3].type, Event.EventType.BOOK_RETURN);
+            Assert.AreEqual(l.eventHistory[3].actor.Username, "Black");
+            Assert.AreEqual(l.eventHistory[3].bookAffected.Title, "On the Bright Side");
+            Assert.AreEqual(l.eventHistory.Count, 4);
         }
 
         [TestMethod]
@@ -153,6 +181,7 @@ namespace Task1_Test
         {
             ls.Login("White");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => ls.ReserveBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
+            Assert.AreEqual(l.eventHistory.Count, 0);
         }
 
         [TestMethod]
@@ -164,11 +193,17 @@ namespace Task1_Test
 
             int temp = l.bookList.Count;
             ls.AddBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
+            Assert.AreEqual(l.eventHistory[0].type, Event.EventType.ADD_A_BOOK);
+            Assert.AreEqual(l.eventHistory[0].actor.Username, "Gold");
+            Assert.AreEqual(l.eventHistory[0].bookAffected.Title, "Harry Potter and the Philosopher's Stone");
+
             l.SelectBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true, Book.BookState.AVAILABLE);
             Assert.AreEqual(l.bookList.Count, temp + 1);
 
-            l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.AVAILABLE);
             ls.RemoveBook("On the Bright Side", "Hendrik Groen", false);
+            Assert.AreEqual(l.eventHistory[1].type, Event.EventType.REMOVE_A_BOOK);
+            Assert.AreEqual(l.eventHistory[1].actor.Username, "Gold");
+            Assert.AreEqual(l.eventHistory[1].bookAffected.Title, "On the Bright Side");
             Assert.ThrowsException<ILibrary.NoSuchBook_Exception>(() =>
                 l.SelectBook("On the Bright Side", "Hendrik Groen", false, Book.BookState.AVAILABLE));
         }
@@ -184,13 +219,22 @@ namespace Task1_Test
             Assert.IsTrue(l.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
 
             ls.AddBook("The Tempest", "William Shakespeare", false);
-            Assert.AreEqual(l.bookList.Count, temp + 1);
+            ls.AddBook("The Tempest", "William Shakespeare", false);
+
+            Assert.AreEqual(l.bookList.Count, temp + 2);
 
             ls.RemoveCatalogEntry("The Tempest", "William Shakespeare", false);
+
+            Assert.AreEqual(l.eventHistory[2].type, Event.EventType.REMOVE_A_BOOK);
+            Assert.AreEqual(l.eventHistory[2].actor.Username, "Gold");
+            Assert.AreEqual(l.eventHistory[2].bookAffected.Title, "The Tempest");
+
+            Assert.AreEqual(l.eventHistory[3].type, Event.EventType.REMOVE_A_BOOK);
+            Assert.AreEqual(l.eventHistory[3].actor.Username, "Gold");
+            Assert.AreEqual(l.eventHistory[3].bookAffected.Title, "The Tempest");
+
             Assert.AreEqual(l.bookList.Count, temp);
             Assert.IsFalse(l.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
         }
-
-
     }
 }
