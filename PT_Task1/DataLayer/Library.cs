@@ -12,6 +12,14 @@ namespace PT_Task1.DataLayer
         private Book activeBook;
         private User activeUser;
 
+        public Library() {
+            this.AddBook(Catalog.entries[0]);
+            this.AddBook(Catalog.entries[1]);
+            this.AddBook(Catalog.entries[1]);
+
+            this.userList.Add(new User("Myself", true, true));
+        }
+
         public void AddBook(CatalogEntry entry)
         {
             bookList.Add(new Book(entry));
@@ -32,20 +40,26 @@ namespace PT_Task1.DataLayer
         }
 
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState)
-        //TODO what if not?
         {
             foreach (Book book in bookList)
             {
                 if (book.Description.Title == title
                     && book.Description.Author == author
                     && book.Description.Hardback == hardback
-                    && book.state == bookState) this.activeBook = book;
+                    && book.state == bookState) {
+
+                    this.activeBook = book;
+                    return;
+                }
             } throw new ILibrary.NoSuchBook_Exception();
         }
 
         public void SelectUser(string username) {
             foreach (User user in userList) {
-                if (user.Username == username) this.activeUser = user;
+                if (user.Username == username) {
+                    this.activeUser = user;
+                    return;
+                }
             } throw new ILibrary.NoSuchUser_Exception();
         }
 

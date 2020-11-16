@@ -3,7 +3,7 @@ using PT_Task1.DataLayer;
 
 namespace PT_Task1.LogicLayer
 {
-    class LibraryService
+    public class LibraryService
     {
         public LibraryService(ILibrary library) {
             this.library = library;
@@ -38,6 +38,6 @@ namespace PT_Task1.LogicLayer
             }
         }
 
-        class ServiceException : Exception { };
+        public class ServiceException : Exception { };
     }
 }

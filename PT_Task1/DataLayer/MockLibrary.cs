@@ -14,6 +14,11 @@ namespace PT_Task1.DataLayer
             throw new NotImplementedException();
         }
 
+        public void AssignTheBookToTheUser()
+        {
+            throw new NotImplementedException();
+        }
+
         public void ChangeActiveBookStateTo(Book.BookState bookState)
         {
             throw new NotImplementedException();

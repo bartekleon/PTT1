@@ -2,7 +2,7 @@
 
 namespace PT_Task1.DataLayer
 {
-    interface ILibrary
+    public interface ILibrary
     {
         public void RemoveEntry(int which);
         public void RemoveEntry(string title, string author, bool hardback);
