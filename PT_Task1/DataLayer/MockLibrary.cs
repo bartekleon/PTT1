@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 
 namespace PT_Task1.DataLayer
 {
@@ -12,6 +10,11 @@ namespace PT_Task1.DataLayer
         }
 
         public void AddEntry(string title, string author, bool hardback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void ChangeActiveBookStateTo(Book.BookState bookState)
         {
             throw new NotImplementedException();
         }
@@ -37,6 +40,16 @@ namespace PT_Task1.DataLayer
         }
 
         public void RemoveEntry(string title, string author, bool hardback)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SelectBook(string title, string author, bool hardback, Book.BookState bookState)
+        {
+            throw new NotImplementedException();
+        }
+
+        public void SelectUser(string username)
         {
             throw new NotImplementedException();
         }

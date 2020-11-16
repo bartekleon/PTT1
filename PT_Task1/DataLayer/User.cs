@@ -1,36 +1,27 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Text;
+﻿using System.Collections.Generic;
 
 namespace PT_Task1.DataLayer
 {
     public class User
     {
-        public String username { get; private set; }
+        public string Username { get; private set; }
 
-        public int borrowLimit { get; private set; }
-        public List<Book> borrowedBooks;
+        public int BorrowLimit { get; private set; } = 0;
+        public List<Book> borrowedBooks = new List<Book>();
 
-        public int reserveLimit { get; private set; }
-        public List<Book> reservedBooks;
+        public int ReserveLimit { get; private set; } = 0;
+        public List<Book> reservedBooks = new List<Book>();
 
-        public User(String username, bool canBorrow, bool canReserve) {
-            this.username = username;
+        public User(string username, bool canBorrow, bool canReserve) {
+            this.Username = username;
 
             if (canBorrow) {
-                this.borrowLimit = 6;
-                this.borrowedBooks = new List<Book>();
-            } else {
-                this.borrowLimit = 0;
-            }
+                this.BorrowLimit = 6;
 
-            if (canReserve)
-            {
-                this.reserveLimit = 3;
-                this.reservedBooks = new List<Book>();
-            }
-            else {
-                this.reserveLimit = 0;
+                if (canReserve)
+                {
+                    this.ReserveLimit = 3;
+                }
             }
         }
     }

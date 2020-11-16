@@ -1,6 +1,4 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.Text;
 using PT_Task1.DataLayer;
 
 namespace PT_Task1.LogicLayer
@@ -13,11 +11,11 @@ namespace PT_Task1.LogicLayer
 
         public ILibrary library;
 
-        public void login(String username) {
+        public void Login(string username) {
             
         }
 
-        public void rentBook(String title, String author, bool hardback) {
+        public void RentBook(string title, string author, bool hardback) {
             if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
             try
             {

@@ -1,6 +1,5 @@
 ﻿using System;
 using System.Collections.Generic;
-using System.Text;
 
 namespace PT_Task1.DataLayer
 {
@@ -27,7 +26,7 @@ namespace PT_Task1.DataLayer
         {
             foreach (CatalogEntry entry in Catalog.entries)
             {
-                if (entry.title == title && entry.author == author && entry.hardback == hardback) return true;
+                if (entry.Title == title && entry.Author == author && entry.Hardback == hardback) return true;
             }
             return false;
         }
@@ -37,9 +36,9 @@ namespace PT_Task1.DataLayer
         {
             foreach (Book book in bookList)
             {
-                if (book.description.title == title
-                    && book.description.author == author
-                    && book.description.hardback == hardback
+                if (book.Description.Title == title
+                    && book.Description.Author == author
+                    && book.Description.Hardback == hardback
                     && book.state == bookState) this.activeBook = book;
             } throw new ILibrary.NoSuchBook_Exception();
         }
@@ -48,9 +47,9 @@ namespace PT_Task1.DataLayer
             this.activeBook.state = bookState;    
         }
 
-        public void SelectUser(String username) {
+        public void SelectUser(string username) {
             foreach (User user in userList) {
-                if (user.username == username) this.activeUser = user;
+                if (user.Username == username) this.activeUser = user;
             } throw new ILibrary.NoSuchUser_Exception();
         }
 
