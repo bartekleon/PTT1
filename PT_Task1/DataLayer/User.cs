@@ -12,10 +12,12 @@ namespace PT_Task1.DataLayer
         public int ReserveLimit { get; private set; } = 0;
         public readonly List<Book> reservedBooks = new List<Book>();
 
-        public User(string username, bool canBorrow, bool canReserve) {
+        public User(string username, bool canBorrow, bool canReserve)
+        {
             this.Username = username;
 
-            if (canBorrow) {
+            if (canBorrow)
+            {
                 this.BorrowLimit = 6;
 
                 if (canReserve)

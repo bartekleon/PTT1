@@ -17,17 +17,17 @@ namespace Task1_Test
         [TestMethod]
         public void TestAddBook()
         {
+            int temp = library.bookList.Count;
             library.AddBook(new CatalogEntry("hello", "world", true));
-
-            Assert.AreEqual(library.bookList.Count, 1);
+            Assert.AreEqual(library.bookList.Count, temp + 1);
         }
 
         [TestMethod]
         public void TestAddEntry()
         {
+            int temp = Catalog.entries.Count;
             library.AddEntry("hello", "world", true);
-
-            Assert.AreEqual(Catalog.entries.Count, 3);
+            Assert.AreEqual(Catalog.entries.Count, temp + 1);
         }
 
         [TestMethod]
@@ -36,9 +36,10 @@ namespace Task1_Test
             CatalogEntry catalogEntry = new CatalogEntry("hello", "world", true);
 
             library.AddBook(catalogEntry);
+            int temp = library.bookList.Count;
             library.RemoveBook(catalogEntry);
 
-            Assert.AreEqual(library.bookList.Count, 0);
+            Assert.AreEqual(library.bookList.Count, temp - 1);
         }
 
         [TestMethod]

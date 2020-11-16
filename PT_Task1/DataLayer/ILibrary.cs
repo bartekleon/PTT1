@@ -10,8 +10,10 @@ namespace PT_Task1.DataLayer
         public bool CheckIfEntryExists(string title, string author, bool hardback);
 
         public void SelectBook(string title, string author, bool hardback, Book.BookState bookState);
+        public void SelectBook(string title, string author, bool hardback, Book.BookState bookState, string ownerUsername);
         public void ChangeActiveBookStateTo(Book.BookState bookState);
         public void AssignTheBookToTheUser();
+        public void UnassignTheBook();
 
         public void SelectUser(string username);
 

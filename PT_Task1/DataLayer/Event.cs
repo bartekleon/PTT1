@@ -7,7 +7,8 @@ namespace PT_Task1.DataLayer
         public readonly List<Book> booksAffected = new List<Book>();
         public User actor;
 
-        public enum EventType {
+        public enum EventType
+        {
             RESERVATION,
             RENT_A_BOOK,
             BOOK_RETURN,
