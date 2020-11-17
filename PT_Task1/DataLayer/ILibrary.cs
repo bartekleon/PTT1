@@ -10,10 +10,10 @@ namespace PT_Task1.DataLayer
         public bool AmIAdmin();
 
         public void SelectBook(string title, string author, bool hardback);
-        public void SelectBook(string title, string author, bool hardback, Book.BookState bookState);
-        public void SelectBook(string title, string author, bool hardback, Book.BookState bookState, string ownerUsername);
+        public void SelectBook(string title, string author, bool hardback, BookState bookState);
+        public void SelectBook(string title, string author, bool hardback, BookState bookState, string ownerUsername);
         public int CountBooks(string title, string author, bool hardback);
-        public void ChangeTheBookStateTo(Book.BookState bookState);
+        public void ChangeTheBookStateTo(BookState bookState);
         public void AssignTheBookToTheUser();
         public void AssignTheUserToTheBook();
         public void UnassignTheBook();
@@ -36,6 +36,6 @@ namespace PT_Task1.DataLayer
 
         void PassTheBookDownTheQueue();
 
-        void LogEvent(Event.EventType type);
+        void LogEvent(EventType type);
     }
 }

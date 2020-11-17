@@ -12,6 +12,26 @@ namespace Task1_Test
         public void BeforeEach()
         {
             library = new Library();
+
+            library.AddEntry("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
+            library.AddEntry("On the Bright Side", "Hendrik Groen", false);
+            library.AddEntry("Pride and Prejudice", "Jane Austin", false);
+
+            library.AddBook(Catalog.entries[1]);
+
+            library.AddBook(Catalog.entries[2]);
+            library.AddBook(Catalog.entries[2]);
+            library.AddBook(Catalog.entries[2]);
+            library.AddBook(Catalog.entries[2]);
+            library.AddBook(Catalog.entries[2]);
+            library.AddBook(Catalog.entries[2]);
+            library.AddBook(Catalog.entries[2]);
+
+            library.userList.Add(new User("White", true, true));
+            library.userList.Add(new User("Red", false, false));
+            library.userList.Add(new User("Black", true, true));
+            library.userList.Add(new User("Blue", true, false));
+            library.userList.Add(new User("Gold", true, true, true));
         }
 
         [TestMethod]
@@ -38,7 +58,7 @@ namespace Task1_Test
             library.AddBook(catalogEntry);
             int temp = library.bookList.Count;
 
-            library.SelectBook("hello", "world", true, Book.BookState.AVAILABLE);
+            library.SelectBook("hello", "world", true, BookState.AVAILABLE);
             library.RemoveTheBook();
 
             Assert.AreEqual(library.bookList.Count, temp - 1);
@@ -53,7 +73,7 @@ namespace Task1_Test
             library.AddBook(catalogEntry);
             int temp = library.bookList.Count;
 
-            library.SelectBook("hello", "world", true, Book.BookState.AVAILABLE);
+            library.SelectBook("hello", "world", true, BookState.AVAILABLE);
             library.RemoveAllBooks("hello", "world", true);
 
             Assert.AreEqual(library.bookList.Count, temp - 2);

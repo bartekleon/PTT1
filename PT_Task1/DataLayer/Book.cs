@@ -14,12 +14,11 @@ namespace PT_Task1.DataLayer
         {
             this.Description = entry;
         }
-
-        public enum BookState
-        {
-            AVAILABLE,
-            BORROWED,
-            RESERVED
-        }
+    }
+    public enum BookState
+    {
+        AVAILABLE,
+        BORROWED,
+        RESERVED
     }
 }

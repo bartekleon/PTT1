@@ -12,14 +12,13 @@
             this.actor = actor;
             this.type = type;
         }
-
-        public enum EventType
-        {
-            RESERVATION,
-            RENT_A_BOOK,
-            BOOK_RETURN,
-            ADD_A_BOOK,
-            REMOVE_A_BOOK
-        };
     }
+    public enum EventType
+    {
+        RESERVATION,
+        RENT_A_BOOK,
+        BOOK_RETURN,
+        ADD_A_BOOK,
+        REMOVE_A_BOOK
+    };
 }

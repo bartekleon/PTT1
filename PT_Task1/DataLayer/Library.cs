@@ -11,27 +11,7 @@ namespace PT_Task1.DataLayer
         private Book activeBook;
         private User activeUser;
 
-        public Library()
-        {
-            this.AddEntry("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
-            this.AddEntry("On the Bright Side", "Hendrik Groen", false);
-            this.AddEntry("Pride and Prejudice", "Jane Austin", false);
-
-            this.AddBook(Catalog.entries[1]);
-
-            this.AddBook(Catalog.entries[2]);
-            this.AddBook(Catalog.entries[2]);
-            this.AddBook(Catalog.entries[2]);
-            this.AddBook(Catalog.entries[2]);
-            this.AddBook(Catalog.entries[2]);
-            this.AddBook(Catalog.entries[2]);
-            this.AddBook(Catalog.entries[2]);
-
-            this.userList.Add(new User("White", true, true));
-            this.userList.Add(new User("Red", false, false));
-            this.userList.Add(new User("Black", true, true));
-            this.userList.Add(new User("Blue", true, false));
-            this.userList.Add(new User("Gold", true, true, true));
+        public Library() {    
         }
 
         public void AddBook(CatalogEntry entry)
@@ -72,7 +52,7 @@ namespace PT_Task1.DataLayer
             }
             throw new ILibrary.NoSuchBook_Exception();
         }
-        public void SelectBook(string title, string author, bool hardback, Book.BookState bookState)
+        public void SelectBook(string title, string author, bool hardback, BookState bookState)
         {
             foreach (Book book in bookList)
             {
@@ -88,7 +68,7 @@ namespace PT_Task1.DataLayer
             }
             throw new ILibrary.NoSuchBook_Exception();
         }
-        public void SelectBook(string title, string author, bool hardback, Book.BookState bookState, string ownerUsername)
+        public void SelectBook(string title, string author, bool hardback, BookState bookState, string ownerUsername)
         {
             foreach (Book book in bookList)
             {
@@ -166,7 +146,7 @@ namespace PT_Task1.DataLayer
             }
         }
 
-        public void ChangeTheBookStateTo(Book.BookState bookState)
+        public void ChangeTheBookStateTo(BookState bookState)
         {
             this.activeBook.state = bookState;
         }
@@ -195,10 +175,10 @@ namespace PT_Task1.DataLayer
 
         public void PassTheBookDownTheQueue()
         {
-            if (this.activeBook.reservationQueue.Count > 0 && this.activeBook.state == Book.BookState.AVAILABLE)
+            if (this.activeBook.reservationQueue.Count > 0 && this.activeBook.state == BookState.AVAILABLE)
             {
                 this.activeBook.CurrentOwner = this.activeBook.reservationQueue.Dequeue();
-                this.activeBook.state = Book.BookState.RESERVED;
+                this.activeBook.state = BookState.RESERVED;
 
             }
         }
@@ -229,7 +209,7 @@ namespace PT_Task1.DataLayer
             throw new ILibrary.NoSuchEntry_Exception();
         }
 
-        public void LogEvent(Event.EventType type)
+        public void LogEvent(EventType type)
         {
             eventHistory.Add(new Event(activeBook.Description, activeUser, type));
         }
