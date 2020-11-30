@@ -11,7 +11,8 @@ namespace PT_Task1.DataLayer
         private Book activeBook;
         private User activeUser;
 
-        public Library() {    
+        public Library()
+        {
         }
 
         public void AddBook(CatalogEntry entry)
@@ -35,6 +36,11 @@ namespace PT_Task1.DataLayer
                 if (entry.Title == title && entry.Author == author && entry.Hardback == hardback) return true;
             }
             return false;
+        }
+
+        public void SelectBook(int which)
+        {
+            if (which < bookList.Count) this.activeBook = bookList[which];
         }
 
         public void SelectBook(string title, string author, bool hardback)
@@ -118,7 +124,7 @@ namespace PT_Task1.DataLayer
                 if (book == this.activeBook)
                 {
                     bookList.Remove(book);
-                    break;
+                    return;
                 }
             }
         }
@@ -214,6 +220,45 @@ namespace PT_Task1.DataLayer
             eventHistory.Add(new Event(activeBook.Description, activeUser, type));
         }
 
+        public void AddUser(string username, bool canBorrow, bool canReserve)
+        {
+            this.userList.Add(new User(username, canBorrow, canReserve));
+        }
 
+        public void AddUser(string username, bool canBorrow, bool canReserve, bool isAdmin)
+        {
+            this.userList.Add(new User(username, canBorrow, canReserve, isAdmin));
+        }
+
+
+        public string getSelectedTitle()
+        {
+            return this.activeBook.Description.Title;
+        }
+
+        public string getSelectedAuthor()
+        {
+            return this.activeBook.Description.Author;
+        }
+
+        public bool getSelectedHardback()
+        {
+            return this.activeBook.Description.Hardback;
+        }
+
+        public int CountAllBooks()
+        {
+            return this.bookList.Count;
+        }
+
+        public int CountAllUsers()
+        {
+            return this.userList.Count;
+        }
+
+        public int CountAllEntries()
+        {
+            return Catalog.entries.Count;
+        }
     }
 }

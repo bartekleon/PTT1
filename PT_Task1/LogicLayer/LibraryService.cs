@@ -6,6 +6,9 @@ namespace PT_Task1.LogicLayer
     public class LibraryService
     {
         private string LoggedInUser;
+        public string RememberedTitle;
+        public string RememberedAuthor;
+        public bool RememeberedHardback;
 
         public LibraryService(ILibrary library)
         {
@@ -27,17 +30,33 @@ namespace PT_Task1.LogicLayer
             }
         }
 
+        private void GetRandomBook()
+        {
+            library.SelectBook(new Random().Next(library.CountAllBooks()));
+
+            RememberedTitle = library.getSelectedTitle();
+            RememberedAuthor = library.getSelectedAuthor();
+            RememeberedHardback = library.getSelectedHardback();
+        }
+
+
+        public void RentBook()
+        {
+            GetRandomBook();
+            RentBook(RememberedTitle, RememberedAuthor, RememeberedHardback);
+        }
+
         public void RentBook(string title, string author, bool hardback)
         {
             if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
             if (!library.CanIBorrow()) throw new NotAppropriatePermits_Exception();
             try
             {
-                library.SelectBook(title, author, hardback, Book.BookState.AVAILABLE);
+                library.SelectBook(title, author, hardback, BookState.AVAILABLE);
                 library.AssignTheBookToTheUser();
                 library.AssignTheUserToTheBook();
-                library.ChangeTheBookStateTo(Book.BookState.BORROWED);
-                library.LogEvent(Event.EventType.RENT_A_BOOK);
+                library.ChangeTheBookStateTo(BookState.BORROWED);
+                library.LogEvent(EventType.RENT_A_BOOK);
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
@@ -54,9 +73,9 @@ namespace PT_Task1.LogicLayer
             if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
             try
             {
-                library.SelectBook(title, author, hardback, Book.BookState.RESERVED, LoggedInUser);
-                library.ChangeTheBookStateTo(Book.BookState.BORROWED);
-                library.LogEvent(Event.EventType.RENT_A_BOOK);
+                library.SelectBook(title, author, hardback, BookState.RESERVED, LoggedInUser);
+                library.ChangeTheBookStateTo(BookState.BORROWED);
+                library.LogEvent(EventType.RENT_A_BOOK);
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
@@ -68,16 +87,22 @@ namespace PT_Task1.LogicLayer
             }
         }
 
+
+
+        public void ReturnBook()
+        {
+            ReturnBook(RememberedTitle, RememberedAuthor, RememeberedHardback);
+        }
         public void ReturnBook(string title, string author, bool hardback)
         {
             if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
             try
             {
-                library.SelectBook(title, author, hardback, Book.BookState.BORROWED, LoggedInUser);
+                library.SelectBook(title, author, hardback, BookState.BORROWED, LoggedInUser);
                 library.UnassignTheBook();
-                library.ChangeTheBookStateTo(Book.BookState.AVAILABLE);
+                library.ChangeTheBookStateTo(BookState.AVAILABLE);
                 library.PassTheBookDownTheQueue();
-                library.LogEvent(Event.EventType.BOOK_RETURN);
+                library.LogEvent(EventType.BOOK_RETURN);
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
@@ -85,32 +110,38 @@ namespace PT_Task1.LogicLayer
             }
         }
 
+
+        public void ReserveBook()
+        {
+            GetRandomBook();
+            ReserveBook(RememberedTitle, RememberedAuthor, RememeberedHardback);
+        }
         public void ReserveBook(string title, string author, bool hardback)
         {
             if (!library.CheckIfEntryExists(title, author, hardback)) throw new NoSuchEntry_Exception();
-            if (!library.CanIReserve()) throw new ServiceException();
+            if (!library.CanIReserve()) throw new NotAppropriatePermits_Exception();
             try
             {
-                library.SelectBook(title, author, hardback, Book.BookState.AVAILABLE);
-                library.ChangeTheBookStateTo(Book.BookState.RESERVED);
+                library.SelectBook(title, author, hardback, BookState.AVAILABLE);
+                library.ChangeTheBookStateTo(BookState.RESERVED);
                 library.AssignTheUserToTheBook();
-                library.LogEvent(Event.EventType.RESERVATION);
+                library.LogEvent(EventType.RESERVATION);
             }
             catch (ILibrary.NoSuchBook_Exception)
             {
                 try
                 {
-                    library.SelectBook(title, author, hardback, Book.BookState.RESERVED);
+                    library.SelectBook(title, author, hardback, BookState.RESERVED);
                     library.AddTheUserToQueue();
-                    library.LogEvent(Event.EventType.RESERVATION);
+                    library.LogEvent(EventType.RESERVATION);
                 }
                 catch (ILibrary.NoSuchBook_Exception)
                 {
                     try
                     {
-                        library.SelectBook(title, author, hardback, Book.BookState.BORROWED);
+                        library.SelectBook(title, author, hardback, BookState.BORROWED);
                         library.AddTheUserToQueue();
-                        library.LogEvent(Event.EventType.RESERVATION);
+                        library.LogEvent(EventType.RESERVATION);
                     }
                     catch (ILibrary.NoSuchBook_Exception)
                     {
@@ -136,7 +167,7 @@ namespace PT_Task1.LogicLayer
                     library.SelectBook(title, author, hardback);
                     for (int i = 0; i < library.CountBooks(title, author, hardback); i++)
                     {
-                        library.LogEvent(Event.EventType.REMOVE_A_BOOK);
+                        library.LogEvent(EventType.REMOVE_A_BOOK);
                     }
                 }
                 catch (ILibrary.NoSuchBook_Exception) { }
@@ -151,8 +182,8 @@ namespace PT_Task1.LogicLayer
             if (!library.AmIAdmin()) throw new NotAppropriatePermits_Exception();
             AddCatalogEntry(title, author, hardback);
             library.AddBook(title, author, hardback);
-            library.SelectBook(title, author, hardback, Book.BookState.AVAILABLE);
-            library.LogEvent(Event.EventType.ADD_A_BOOK);
+            library.SelectBook(title, author, hardback, BookState.AVAILABLE);
+            library.LogEvent(EventType.ADD_A_BOOK);
         }
 
         public void RemoveBook(string title, string author, bool hardback)
@@ -160,8 +191,8 @@ namespace PT_Task1.LogicLayer
             if (!library.AmIAdmin()) throw new NotAppropriatePermits_Exception();
             try
             {
-                library.SelectBook(title, author, hardback, Book.BookState.AVAILABLE);
-                library.LogEvent(Event.EventType.REMOVE_A_BOOK);
+                library.SelectBook(title, author, hardback, BookState.AVAILABLE);
+                library.LogEvent(EventType.REMOVE_A_BOOK);
                 library.RemoveTheBook();
             }
             catch (ILibrary.NoSuchBook_Exception)
