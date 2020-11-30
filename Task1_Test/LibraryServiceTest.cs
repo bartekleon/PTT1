@@ -11,10 +11,6 @@ namespace Task1_Test
         LibraryService fls;
         LibraryController flc;
 
-        Library rl;
-        LibraryService rls;
-        LibraryController rlc;
-
         [TestInitialize]
         public void BeforeEach()
         {
