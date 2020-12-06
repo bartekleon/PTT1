@@ -31,6 +31,7 @@ namespace PT_Task1.DataLayer
         public int CountAllUsers();
 
         public void AddBook(string title, string author, bool hardback);
+        public void AddBook(CatalogEntry entry);
         public void RemoveTheBook();
         public void RemoveAllBooks(string title, string author, bool hardback);
         public void RemoveEntry(int which);

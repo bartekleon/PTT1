@@ -10,12 +10,12 @@ namespace PT_Task1.LogicLayer
         public string RememberedAuthor;
         public bool RememeberedHardback;
 
+        public ILibrary library;
+
         public LibraryService(ILibrary library)
         {
             this.library = library;
         }
-
-        public ILibrary library;
 
         public void Login(string username)
         {
