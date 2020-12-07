@@ -1,4 +1,5 @@
-﻿using System.Collections.Generic;
+﻿using System;
+using System.Collections.Generic;
 
 namespace PT_Task1.DataLayer
 {
@@ -259,6 +260,21 @@ namespace PT_Task1.DataLayer
         public int CountAllEntries()
         {
             return Catalog.entries.Count;
+        }
+
+        public static implicit operator Library(global::Task1_Test.LibraryTest v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static implicit operator Library(global::Task1_Test.LibraryTest v)
+        {
+            throw new NotImplementedException();
+        }
+
+        public static implicit operator Library(global::Task1_Test.LibraryTest v)
+        {
+            throw new NotImplementedException();
         }
     }
 }

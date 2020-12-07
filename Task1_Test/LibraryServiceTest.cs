@@ -7,14 +7,14 @@ namespace Task1_Test
     [TestClass]
     public class LibraryServiceTest
     {
-        Library fl;
+        ILibrary fl;
         LibraryService fls;
         LibraryController flc;
 
         [TestInitialize]
         public void BeforeEach()
         {
-            fl = new Library();
+            fl = new Library2();
             FixedDataGenerator.Populate(fl);
             fls = new LibraryService(fl);
             flc = new LibraryController(fls);
@@ -234,6 +234,169 @@ namespace Task1_Test
 
             Assert.AreEqual(fl.bookList.Count, temp);
             Assert.IsFalse(fl.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
+        }
+    }
+
+    internal class Library2 : ILibrary
+    {
+        public void AddBook(string title, string author, bool hardback)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddBook(CatalogEntry entry)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddEntry(string title, string author, bool hardback)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddTheUserToQueue()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddUser(string username, bool canBorrow, bool canReserve)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AddUser(string username, bool canBorrow, bool canReserve, bool isAdmin)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool AmIAdmin()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AssignTheBookToTheUser()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void AssignTheUserToTheBook()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool CanIBorrow()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool CanIReserve()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void ChangeTheBookStateTo(BookState bookState)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool CheckIfEntryExists(string title, string author, bool hardback)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int CountAllBooks()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int CountAllEntries()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int CountAllUsers()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public int CountBooks(string title, string author, bool hardback)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetSelectedAuthor()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public bool GetSelectedHardback()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public string GetSelectedTitle()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void LogEvent(EventType type)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void PassTheBookDownTheQueue()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveAllBooks(string title, string author, bool hardback)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveEntry(int which)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveEntry(string title, string author, bool hardback)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void RemoveTheBook()
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SelectBook(int which)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SelectBook(string title, string author, bool hardback)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SelectBook(string title, string author, bool hardback, BookState bookState)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SelectBook(string title, string author, bool hardback, BookState bookState, string ownerUsername)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void SelectUser(string username)
+        {
+            throw new System.NotImplementedException();
+        }
+
+        public void UnassignTheBook()
+        {
+            throw new System.NotImplementedException();
         }
     }
 

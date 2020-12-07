@@ -14,7 +14,7 @@ namespace PT_Task1.LogicLayer
 
         public LibraryService(ILibrary library)
         {
-            this.library = library;
+            this.library = new Library();
         }
 
         public void Login(string username)
