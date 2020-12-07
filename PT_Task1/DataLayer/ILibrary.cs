@@ -51,6 +51,5 @@ namespace PT_Task1.DataLayer
         public void LogEvent(EventType type);
 
         internal List<Event> GetEvents();
-        internal List<Book> GetBookList();
     }
 }

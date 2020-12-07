@@ -1,7 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PT_Task1.DataLayer;
 using PT_Task1.LogicLayer;
-using System.Collections.Generic;
+using Task1_Test.Instrumentation;
 
 namespace Task1_Test
 {
@@ -16,7 +16,6 @@ namespace Task1_Test
         public void BeforeEach()
         {
             fl = new Library2();
-            FixedDataGenerator.Populate(fl);
             fls = new LibraryService(fl);
             flc = new LibraryController(fls);
         }
@@ -29,9 +28,6 @@ namespace Task1_Test
 
             fls.RentBook("On the Bright Side", "Hendrik Groen", false);
             Assert.IsTrue(flc.SearchForABook("On the Bright Side", "Hendrik Groen", false, BookState.BORROWED, "White"));
-            Assert.AreEqual(fl.GetEvents()[0].type, EventType.RENT_A_BOOK);
-            Assert.AreEqual(fl.GetEvents()[0].bookAffected.Title, "On the Bright Side");
-            Assert.AreEqual(fl.GetEvents()[0].actor.Username, "White");
 
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => fls.RentBook("On the Bright Side", "Hendrik Groen", false));
         }
@@ -192,14 +188,14 @@ namespace Task1_Test
             fls.Login("Gold");
             Assert.IsFalse(flc.SearchForABook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true, BookState.AVAILABLE));
 
-            int temp = fl.GetBookList().Count;
+            int temp = fl.CountAllBooks();
             fls.AddBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
             Assert.AreEqual(fl.GetEvents()[0].type, EventType.ADD_A_BOOK);
             Assert.AreEqual(fl.GetEvents()[0].actor.Username, "Gold");
             Assert.AreEqual(fl.GetEvents()[0].bookAffected.Title, "Harry Potter and the Philosopher's Stone");
 
             Assert.IsTrue(flc.SearchForABook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true, BookState.AVAILABLE));
-            Assert.AreEqual(fl.GetBookList().Count, temp + 1);
+            Assert.AreEqual(fl.CountAllBooks(), temp + 1);
 
             fls.RemoveBook("On the Bright Side", "Hendrik Groen", false);
             Assert.AreEqual(fl.GetEvents()[1].type, EventType.REMOVE_A_BOOK);
@@ -213,7 +209,7 @@ namespace Task1_Test
         {
             fls.Login("Gold");
             Assert.IsFalse(fl.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
-            int temp = fl.GetBookList().Count;
+            int temp = fl.CountAllBooks();
 
             fls.AddCatalogEntry("The Tempest", "William Shakespeare", false);
             Assert.IsTrue(fl.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
@@ -221,7 +217,7 @@ namespace Task1_Test
             fls.AddBook("The Tempest", "William Shakespeare", false);
             fls.AddBook("The Tempest", "William Shakespeare", false);
 
-            Assert.AreEqual(fl.GetBookList().Count, temp + 2);
+            Assert.AreEqual(fl.CountAllBooks(), temp + 2);
 
             fls.RemoveCatalogEntry("The Tempest", "William Shakespeare", false);
 
@@ -233,170 +229,14 @@ namespace Task1_Test
             Assert.AreEqual(fl.GetEvents()[3].actor.Username, "Gold");
             Assert.AreEqual(fl.GetEvents()[3].bookAffected.Title, "The Tempest");
 
-            Assert.AreEqual(fl.GetBookList().Count, temp);
+            Assert.AreEqual(fl.CountAllBooks(), temp);
             Assert.IsFalse(fl.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
-        }
-    }
-
-    internal class Library2 : ILibrary
-    {
-        public readonly List<User> userList = new List<User>();
-        public readonly List<Book> bookList = new List<Book>();
-        public readonly List<Event> eventHistory = new List<Event>();
-
-        private Book activeBook;
-        private User activeUser;
-
-        public void AddBook(string title, string author, bool hardback)
-        {
-        }
-
-        public void AddBook(CatalogEntry entry)
-        {
-        }
-
-        public void AddEntry(string title, string author, bool hardback)
-        {
-        }
-
-        public void AddTheUserToQueue()
-        {
-        }
-
-        public void AddUser(string username, bool canBorrow, bool canReserve) { }
-
-        public void AddUser(string username, bool canBorrow, bool canReserve, bool isAdmin) { }
-
-        public bool AmIAdmin()
-        {
-            return true;
-        }
-
-        public void AssignTheBookToTheUser()
-        {
-        }
-
-        public void AssignTheUserToTheBook()
-        {
-        }
-
-        public bool CanIBorrow()
-        {
-            return true;
-        }
-
-        public bool CanIReserve()
-        {
-            return true;
-        }
-
-        public void ChangeTheBookStateTo(BookState bookState)
-        {
-        }
-
-        public bool CheckIfEntryExists(string title, string author, bool hardback)
-        {
-            return true;
-        }
-
-        public int CountAllBooks()
-        {
-            return 3;
-        }
-
-        public int CountAllEntries()
-        {
-            return 3;
-        }
-
-        public int CountAllUsers()
-        {
-            return 3;
-        }
-
-        public int CountBooks(string title, string author, bool hardback)
-        {
-            return 3;
-        }
-
-        public string GetSelectedAuthor()
-        {
-            return "";
-        }
-
-        public bool GetSelectedHardback()
-        {
-            return true;
-        }
-
-        public string GetSelectedTitle()
-        {
-            return "";
-        }
-
-        public void LogEvent(EventType type)
-        {
-        }
-
-        public void PassTheBookDownTheQueue()
-        {
-        }
-
-        public void RemoveAllBooks(string title, string author, bool hardback)
-        {
-        }
-
-        public void RemoveEntry(int which)
-        {
-        }
-
-        public void RemoveEntry(string title, string author, bool hardback)
-        {
-        }
-
-        public void RemoveTheBook()
-        {
-        }
-
-        public void SelectBook(int which)
-        {
-        }
-
-        public void SelectBook(string title, string author, bool hardback)
-        {
-        }
-
-        public void SelectBook(string title, string author, bool hardback, BookState bookState)
-        {
-        }
-
-        public void SelectBook(string title, string author, bool hardback, BookState bookState, string ownerUsername)
-        {
-        }
-
-        public void SelectUser(string username)
-        {
-        }
-
-        public void UnassignTheBook()
-        {
-        }
-
-        List<Book> ILibrary.GetBookList()
-        {
-            return bookList;
-        }
-
-        List<Event> ILibrary.GetEvents()
-        {
-            return eventHistory;
         }
     }
 
     [TestClass]
     public class LibraryServiceTest_RandomData
     {
-
         Library rl;
         LibraryService rls;
         LibraryController rlc;
@@ -420,7 +260,7 @@ namespace Task1_Test
             {
                 if (rlc.CanIBorrow())
                 {
-                                        rls.RentBook();
+                    rls.RentBook();
                     Assert.IsTrue(rlc.SearchForABook(BookState.BORROWED));
                 }
                 else
@@ -444,7 +284,6 @@ namespace Task1_Test
                     rls.ReturnBook();
                     Assert.IsFalse(rlc.SearchForABook(BookState.BORROWED));
                 }
-                
             }
         }
 
