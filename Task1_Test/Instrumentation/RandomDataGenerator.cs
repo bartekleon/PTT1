@@ -3,7 +3,7 @@ using System;
 
 namespace PT_Task1.LogicLayer
 {
-    class RandomDataGenerator
+    internal class RandomDataGenerator
     {
         private static Random random = new Random();
         private static readonly int scale = 8;

@@ -2,7 +2,7 @@
 
 namespace PT_Task1.LogicLayer
 {
-    class LibraryController
+    public class LibraryController
 
     {
         private LibraryService ls;

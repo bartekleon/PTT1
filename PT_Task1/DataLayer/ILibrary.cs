@@ -21,9 +21,9 @@ namespace PT_Task1.DataLayer
         public void UnassignTheBook();
         public void AddTheUserToQueue();
 
-        public string getSelectedTitle();
-        public string getSelectedAuthor();
-        public bool getSelectedHardback();
+        public string GetSelectedTitle();
+        public string GetSelectedAuthor();
+        public bool GetSelectedHardback();
 
         public void SelectUser(string username);
         public void AddUser(string username, bool canBorrow, bool canReserve);
@@ -45,8 +45,8 @@ namespace PT_Task1.DataLayer
         class LimitReached_Exception : Exception { };
         class NotYourBook_Exception : Exception { };
 
-        void PassTheBookDownTheQueue();
+        public void PassTheBookDownTheQueue();
 
-        void LogEvent(EventType type);
+        public void LogEvent(EventType type);
     }
 }

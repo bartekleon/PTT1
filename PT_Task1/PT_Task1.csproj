@@ -6,7 +6,9 @@
   </PropertyGroup>
 
   <ItemGroup>
-    <Folder Include="..\..\..\..\..\Se%2527marafamni lém\3\karaktirs\PT_Task1\PT_Task1\Nowy folder\" />
+    <AssemblyAttribute Include="System.Runtime.CompilerServices.InternalsVisibleTo">
+      <_Parameter1>Task1_Test</_Parameter1>
+    </AssemblyAttribute>
   </ItemGroup>
 
 </Project>

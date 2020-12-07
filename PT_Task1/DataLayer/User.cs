@@ -2,7 +2,7 @@
 
 namespace PT_Task1.DataLayer
 {
-    public class User
+    internal class User
     {
         public string Username { get; private set; }
         public readonly bool isAdmin;

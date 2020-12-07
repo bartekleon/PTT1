@@ -2,7 +2,7 @@
 
 namespace PT_Task1.LogicLayer
 {
-    class FixedDataGenerator
+    internal class FixedDataGenerator
     {
         public static void Populate(ILibrary l)
         {

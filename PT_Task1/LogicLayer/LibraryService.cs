@@ -6,9 +6,9 @@ namespace PT_Task1.LogicLayer
     public class LibraryService
     {
         private string LoggedInUser;
-        public string RememberedTitle;
-        public string RememberedAuthor;
-        public bool RememeberedHardback;
+        public string RememberedTitle { get; private set; }
+        public string RememberedAuthor { get; private set; }
+        public bool RememeberedHardback { get; private set; }
 
         public ILibrary library;
 
@@ -34,9 +34,9 @@ namespace PT_Task1.LogicLayer
         {
             library.SelectBook(new Random().Next(library.CountAllBooks()));
 
-            RememberedTitle = library.getSelectedTitle();
-            RememberedAuthor = library.getSelectedAuthor();
-            RememeberedHardback = library.getSelectedHardback();
+            RememberedTitle = library.GetSelectedTitle();
+            RememberedAuthor = library.GetSelectedAuthor();
+            RememeberedHardback = library.GetSelectedHardback();
         }
 
 

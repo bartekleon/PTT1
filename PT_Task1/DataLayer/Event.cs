@@ -1,10 +1,10 @@
 ﻿namespace PT_Task1.DataLayer
 {
-    public class Event
+    internal class Event
     {
-        public readonly CatalogEntry bookAffected;
-        public readonly User actor;
-        public readonly EventType type;
+        internal readonly CatalogEntry bookAffected;
+        internal readonly User actor;
+        internal readonly EventType type;
 
         public Event(CatalogEntry entry, User actor, EventType type)
         {

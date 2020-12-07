@@ -2,7 +2,7 @@
 
 namespace PT_Task1.DataLayer
 {
-    public class Library : ILibrary
+    internal class Library : ILibrary
     {
         public readonly List<User> userList = new List<User>();
         public readonly List<Book> bookList = new List<Book>();
@@ -231,17 +231,17 @@ namespace PT_Task1.DataLayer
         }
 
 
-        public string getSelectedTitle()
+        public string GetSelectedTitle()
         {
             return this.activeBook.Description.Title;
         }
 
-        public string getSelectedAuthor()
+        public string GetSelectedAuthor()
         {
             return this.activeBook.Description.Author;
         }
 
-        public bool getSelectedHardback()
+        public bool GetSelectedHardback()
         {
             return this.activeBook.Description.Hardback;
         }

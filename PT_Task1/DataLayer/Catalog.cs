@@ -2,8 +2,8 @@
 
 namespace PT_Task1.DataLayer
 {
-    public static class Catalog
+    internal static class Catalog
     {
-        public static readonly List<CatalogEntry> entries = new List<CatalogEntry>();
+        internal static readonly List<CatalogEntry> entries = new List<CatalogEntry>();
     }
 }
