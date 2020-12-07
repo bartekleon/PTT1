@@ -273,7 +273,6 @@ namespace Task1_Test
         public void ReturnBook_Test()
         {
             rls.Login("Black");
-            Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => rls.ReturnBook());
 
             for (int i = 0; i < 10; i++)
             {

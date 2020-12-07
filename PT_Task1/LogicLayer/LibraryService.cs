@@ -42,8 +42,14 @@ namespace PT_Task1.LogicLayer
 
         public void RentBook()
         {
-            GetRandomBook();
-            RentBook(RememberedTitle, RememberedAuthor, RememeberedHardback);
+                try
+                {
+                    GetRandomBook();
+                    RentBook(RememberedTitle, RememberedAuthor, RememeberedHardback);
+                }
+
+                catch (NonExistingBook_Exception) {
+                }
         }
 
         public void RentBook(string title, string author, bool hardback)
