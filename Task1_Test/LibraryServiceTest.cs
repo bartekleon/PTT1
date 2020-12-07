@@ -237,15 +237,14 @@ namespace Task1_Test
     [TestClass]
     public class LibraryServiceTest_RandomData
     {
-        Library rl;
+        ILibrary rl;
         LibraryService rls;
         LibraryController rlc;
 
         [TestInitialize]
         public void BeforeEach()
         {
-            rl = new Library();
-            RandomDataGenerator.Populate(rl);
+            rl = new Library3();
             rls = new LibraryService(rl);
             rlc = new LibraryController(rls);
         }
