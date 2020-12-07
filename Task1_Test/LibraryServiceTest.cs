@@ -1,6 +1,7 @@
 ﻿using Microsoft.VisualStudio.TestTools.UnitTesting;
 using PT_Task1.DataLayer;
 using PT_Task1.LogicLayer;
+using System.Collections.Generic;
 
 namespace Task1_Test
 {
@@ -28,9 +29,9 @@ namespace Task1_Test
 
             fls.RentBook("On the Bright Side", "Hendrik Groen", false);
             Assert.IsTrue(flc.SearchForABook("On the Bright Side", "Hendrik Groen", false, BookState.BORROWED, "White"));
-            Assert.AreEqual(fl.eventHistory[0].type, EventType.RENT_A_BOOK);
-            Assert.AreEqual(fl.eventHistory[0].bookAffected.Title, "On the Bright Side");
-            Assert.AreEqual(fl.eventHistory[0].actor.Username, "White");
+            Assert.AreEqual(fl.GetEvents()[0].type, EventType.RENT_A_BOOK);
+            Assert.AreEqual(fl.GetEvents()[0].bookAffected.Title, "On the Bright Side");
+            Assert.AreEqual(fl.GetEvents()[0].actor.Username, "White");
 
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => fls.RentBook("On the Bright Side", "Hendrik Groen", false));
         }
@@ -40,7 +41,7 @@ namespace Task1_Test
         {
             fls.Login("Red");
             Assert.ThrowsException<LibraryService.NotAppropriatePermits_Exception>(() => fls.RentBook("On the Bright Side", "Hendrik Groen", false));
-            Assert.AreEqual(fl.eventHistory.Count, 0);
+            Assert.AreEqual(fl.GetEvents().Count, 0);
         }
 
         [TestMethod]
@@ -50,9 +51,9 @@ namespace Task1_Test
             for (int i = 1; i <= 6; i++)
             {
                 fls.RentBook("Pride and Prejudice", "Jane Austin", false);
-                Assert.AreEqual(fl.eventHistory[i - 1].type, EventType.RENT_A_BOOK);
-                Assert.AreEqual(fl.eventHistory[i - 1].actor.Username, "White");
-                Assert.AreEqual(fl.eventHistory[i - 1].bookAffected.Title, "Pride and Prejudice");
+                Assert.AreEqual(fl.GetEvents()[i - 1].type, EventType.RENT_A_BOOK);
+                Assert.AreEqual(fl.GetEvents()[i - 1].actor.Username, "White");
+                Assert.AreEqual(fl.GetEvents()[i - 1].bookAffected.Title, "Pride and Prejudice");
             }
             Assert.ThrowsException<LibraryService.NotAppropriatePermits_Exception>(() => fls.RentBook("Pride and Prejudice", "Jane Austin", false));
         }
@@ -62,7 +63,7 @@ namespace Task1_Test
         {
             fls.Login("White");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => fls.RentBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
-            Assert.AreEqual(fl.eventHistory.Count, 0);
+            Assert.AreEqual(fl.GetEvents().Count, 0);
         }
 
         [TestMethod]
@@ -73,9 +74,9 @@ namespace Task1_Test
             Assert.IsTrue(flc.SearchForABook("Pride and Prejudice", "Jane Austin", false, BookState.BORROWED, "White"));
 
             fls.ReturnBook("Pride and Prejudice", "Jane Austin", false);
-            Assert.AreEqual(fl.eventHistory[1].type, EventType.BOOK_RETURN);
-            Assert.AreEqual(fl.eventHistory[1].actor.Username, "White");
-            Assert.AreEqual(fl.eventHistory[1].bookAffected.Title, "Pride and Prejudice");
+            Assert.AreEqual(fl.GetEvents()[1].type, EventType.BOOK_RETURN);
+            Assert.AreEqual(fl.GetEvents()[1].actor.Username, "White");
+            Assert.AreEqual(fl.GetEvents()[1].bookAffected.Title, "Pride and Prejudice");
 
             Assert.IsFalse(flc.SearchForABook("Pride and Prejudice", "Jane Austin", false, BookState.BORROWED, "White"));
         }
@@ -85,7 +86,7 @@ namespace Task1_Test
         {
             fls.Login("Black");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => fls.ReturnBook("Pride and Prejudice", "Jane Austin", false));
-            Assert.AreEqual(fl.eventHistory.Count, 0);
+            Assert.AreEqual(fl.GetEvents().Count, 0);
         }
 
         [TestMethod]
@@ -102,9 +103,9 @@ namespace Task1_Test
 
             fls.ReturnBook("Pride and Prejudice", "Jane Austin", false);
 
-            Assert.AreEqual(fl.eventHistory[2].type, EventType.BOOK_RETURN);
-            Assert.AreEqual(fl.eventHistory[2].actor.Username, "Black");
-            Assert.AreEqual(fl.eventHistory[2].bookAffected.Title, "Pride and Prejudice");
+            Assert.AreEqual(fl.GetEvents()[2].type, EventType.BOOK_RETURN);
+            Assert.AreEqual(fl.GetEvents()[2].actor.Username, "Black");
+            Assert.AreEqual(fl.GetEvents()[2].bookAffected.Title, "Pride and Prejudice");
             Assert.IsTrue(flc.SearchForABook("Pride and Prejudice", "Jane Austin", false, BookState.BORROWED, "White"));
             Assert.IsFalse(flc.SearchForABook("Pride and Prejudice", "Jane Austin", false, BookState.BORROWED, "Black"));
         }
@@ -114,9 +115,9 @@ namespace Task1_Test
         {
             fls.Login("White");
             fls.ReserveBook("Pride and Prejudice", "Jane Austin", false);
-            Assert.AreEqual(fl.eventHistory[0].type, EventType.RESERVATION);
-            Assert.AreEqual(fl.eventHistory[0].actor.Username, "White");
-            Assert.AreEqual(fl.eventHistory[0].bookAffected.Title, "Pride and Prejudice");
+            Assert.AreEqual(fl.GetEvents()[0].type, EventType.RESERVATION);
+            Assert.AreEqual(fl.GetEvents()[0].actor.Username, "White");
+            Assert.AreEqual(fl.GetEvents()[0].bookAffected.Title, "Pride and Prejudice");
             Assert.IsTrue(flc.SearchForABook("Pride and Prejudice", "Jane Austin", false, BookState.RESERVED, "White"));
         }
 
@@ -138,9 +139,9 @@ namespace Task1_Test
 
             fls.Login("White");
             fls.RentReservedBook("On the Bright Side", "Hendrik Groen", false);
-            Assert.AreEqual(fl.eventHistory[2].type, EventType.RENT_A_BOOK);
-            Assert.AreEqual(fl.eventHistory[2].actor.Username, "White");
-            Assert.AreEqual(fl.eventHistory[2].bookAffected.Title, "On the Bright Side");
+            Assert.AreEqual(fl.GetEvents()[2].type, EventType.RENT_A_BOOK);
+            Assert.AreEqual(fl.GetEvents()[2].actor.Username, "White");
+            Assert.AreEqual(fl.GetEvents()[2].bookAffected.Title, "On the Bright Side");
 
             fls.ReturnBook("On the Bright Side", "Hendrik Groen", false);
             Assert.IsTrue(flc.SearchForABook("On the Bright Side", "Hendrik Groen", false, BookState.RESERVED, "Black"));
@@ -154,7 +155,7 @@ namespace Task1_Test
 
             fls.Login("Blue");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => fls.RentBook("On the Bright Side", "Hendrik Groen", false));
-            Assert.AreEqual(fl.eventHistory.Count, 1);
+            Assert.AreEqual(fl.GetEvents().Count, 1);
         }
 
         [TestMethod]
@@ -171,10 +172,10 @@ namespace Task1_Test
             fls.Login("Black");
             fls.ReturnBook("On the Bright Side", "Hendrik Groen", false);
             Assert.IsTrue(flc.SearchForABook("On the Bright Side", "Hendrik Groen", false, BookState.RESERVED, "White"));
-            Assert.AreEqual(fl.eventHistory[3].type, EventType.BOOK_RETURN);
-            Assert.AreEqual(fl.eventHistory[3].actor.Username, "Black");
-            Assert.AreEqual(fl.eventHistory[3].bookAffected.Title, "On the Bright Side");
-            Assert.AreEqual(fl.eventHistory.Count, 4);
+            Assert.AreEqual(fl.GetEvents()[3].type, EventType.BOOK_RETURN);
+            Assert.AreEqual(fl.GetEvents()[3].actor.Username, "Black");
+            Assert.AreEqual(fl.GetEvents()[3].bookAffected.Title, "On the Bright Side");
+            Assert.AreEqual(fl.GetEvents().Count, 4);
         }
 
         [TestMethod]
@@ -182,7 +183,7 @@ namespace Task1_Test
         {
             fls.Login("White");
             Assert.ThrowsException<LibraryService.NonExistingBook_Exception>(() => fls.ReserveBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true));
-            Assert.AreEqual(fl.eventHistory.Count, 0);
+            Assert.AreEqual(fl.GetEvents().Count, 0);
         }
 
         [TestMethod]
@@ -191,19 +192,19 @@ namespace Task1_Test
             fls.Login("Gold");
             Assert.IsFalse(flc.SearchForABook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true, BookState.AVAILABLE));
 
-            int temp = fl.bookList.Count;
+            int temp = fl.GetBookList().Count;
             fls.AddBook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
-            Assert.AreEqual(fl.eventHistory[0].type, EventType.ADD_A_BOOK);
-            Assert.AreEqual(fl.eventHistory[0].actor.Username, "Gold");
-            Assert.AreEqual(fl.eventHistory[0].bookAffected.Title, "Harry Potter and the Philosopher's Stone");
+            Assert.AreEqual(fl.GetEvents()[0].type, EventType.ADD_A_BOOK);
+            Assert.AreEqual(fl.GetEvents()[0].actor.Username, "Gold");
+            Assert.AreEqual(fl.GetEvents()[0].bookAffected.Title, "Harry Potter and the Philosopher's Stone");
 
             Assert.IsTrue(flc.SearchForABook("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true, BookState.AVAILABLE));
-            Assert.AreEqual(fl.bookList.Count, temp + 1);
+            Assert.AreEqual(fl.GetBookList().Count, temp + 1);
 
             fls.RemoveBook("On the Bright Side", "Hendrik Groen", false);
-            Assert.AreEqual(fl.eventHistory[1].type, EventType.REMOVE_A_BOOK);
-            Assert.AreEqual(fl.eventHistory[1].actor.Username, "Gold");
-            Assert.AreEqual(fl.eventHistory[1].bookAffected.Title, "On the Bright Side");
+            Assert.AreEqual(fl.GetEvents()[1].type, EventType.REMOVE_A_BOOK);
+            Assert.AreEqual(fl.GetEvents()[1].actor.Username, "Gold");
+            Assert.AreEqual(fl.GetEvents()[1].bookAffected.Title, "On the Bright Side");
             Assert.IsFalse(flc.SearchForABook("On the Bright Side", "Hendrik Groen", false, BookState.AVAILABLE));
         }
 
@@ -212,7 +213,7 @@ namespace Task1_Test
         {
             fls.Login("Gold");
             Assert.IsFalse(fl.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
-            int temp = fl.bookList.Count;
+            int temp = fl.GetBookList().Count;
 
             fls.AddCatalogEntry("The Tempest", "William Shakespeare", false);
             Assert.IsTrue(fl.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
@@ -220,183 +221,175 @@ namespace Task1_Test
             fls.AddBook("The Tempest", "William Shakespeare", false);
             fls.AddBook("The Tempest", "William Shakespeare", false);
 
-            Assert.AreEqual(fl.bookList.Count, temp + 2);
+            Assert.AreEqual(fl.GetBookList().Count, temp + 2);
 
             fls.RemoveCatalogEntry("The Tempest", "William Shakespeare", false);
 
-            Assert.AreEqual(fl.eventHistory[2].type, EventType.REMOVE_A_BOOK);
-            Assert.AreEqual(fl.eventHistory[2].actor.Username, "Gold");
-            Assert.AreEqual(fl.eventHistory[2].bookAffected.Title, "The Tempest");
+            Assert.AreEqual(fl.GetEvents()[2].type, EventType.REMOVE_A_BOOK);
+            Assert.AreEqual(fl.GetEvents()[2].actor.Username, "Gold");
+            Assert.AreEqual(fl.GetEvents()[2].bookAffected.Title, "The Tempest");
 
-            Assert.AreEqual(fl.eventHistory[3].type, EventType.REMOVE_A_BOOK);
-            Assert.AreEqual(fl.eventHistory[3].actor.Username, "Gold");
-            Assert.AreEqual(fl.eventHistory[3].bookAffected.Title, "The Tempest");
+            Assert.AreEqual(fl.GetEvents()[3].type, EventType.REMOVE_A_BOOK);
+            Assert.AreEqual(fl.GetEvents()[3].actor.Username, "Gold");
+            Assert.AreEqual(fl.GetEvents()[3].bookAffected.Title, "The Tempest");
 
-            Assert.AreEqual(fl.bookList.Count, temp);
+            Assert.AreEqual(fl.GetBookList().Count, temp);
             Assert.IsFalse(fl.CheckIfEntryExists("The Tempest", "William Shakespeare", false));
         }
     }
 
     internal class Library2 : ILibrary
     {
+        public readonly List<User> userList = new List<User>();
+        public readonly List<Book> bookList = new List<Book>();
+        public readonly List<Event> eventHistory = new List<Event>();
+
+        private Book activeBook;
+        private User activeUser;
+
         public void AddBook(string title, string author, bool hardback)
         {
-            throw new System.NotImplementedException();
         }
 
         public void AddBook(CatalogEntry entry)
         {
-            throw new System.NotImplementedException();
         }
 
         public void AddEntry(string title, string author, bool hardback)
         {
-            throw new System.NotImplementedException();
         }
 
         public void AddTheUserToQueue()
         {
-            throw new System.NotImplementedException();
         }
 
-        public void AddUser(string username, bool canBorrow, bool canReserve)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void AddUser(string username, bool canBorrow, bool canReserve) { }
 
-        public void AddUser(string username, bool canBorrow, bool canReserve, bool isAdmin)
-        {
-            throw new System.NotImplementedException();
-        }
+        public void AddUser(string username, bool canBorrow, bool canReserve, bool isAdmin) { }
 
         public bool AmIAdmin()
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public void AssignTheBookToTheUser()
         {
-            throw new System.NotImplementedException();
         }
 
         public void AssignTheUserToTheBook()
         {
-            throw new System.NotImplementedException();
         }
 
         public bool CanIBorrow()
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public bool CanIReserve()
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public void ChangeTheBookStateTo(BookState bookState)
         {
-            throw new System.NotImplementedException();
         }
 
         public bool CheckIfEntryExists(string title, string author, bool hardback)
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public int CountAllBooks()
         {
-            throw new System.NotImplementedException();
+            return 3;
         }
 
         public int CountAllEntries()
         {
-            throw new System.NotImplementedException();
+            return 3;
         }
 
         public int CountAllUsers()
         {
-            throw new System.NotImplementedException();
+            return 3;
         }
 
         public int CountBooks(string title, string author, bool hardback)
         {
-            throw new System.NotImplementedException();
+            return 3;
         }
 
         public string GetSelectedAuthor()
         {
-            throw new System.NotImplementedException();
+            return "";
         }
 
         public bool GetSelectedHardback()
         {
-            throw new System.NotImplementedException();
+            return true;
         }
 
         public string GetSelectedTitle()
         {
-            throw new System.NotImplementedException();
+            return "";
         }
 
         public void LogEvent(EventType type)
         {
-            throw new System.NotImplementedException();
         }
 
         public void PassTheBookDownTheQueue()
         {
-            throw new System.NotImplementedException();
         }
 
         public void RemoveAllBooks(string title, string author, bool hardback)
         {
-            throw new System.NotImplementedException();
         }
 
         public void RemoveEntry(int which)
         {
-            throw new System.NotImplementedException();
         }
 
         public void RemoveEntry(string title, string author, bool hardback)
         {
-            throw new System.NotImplementedException();
         }
 
         public void RemoveTheBook()
         {
-            throw new System.NotImplementedException();
         }
 
         public void SelectBook(int which)
         {
-            throw new System.NotImplementedException();
         }
 
         public void SelectBook(string title, string author, bool hardback)
         {
-            throw new System.NotImplementedException();
         }
 
         public void SelectBook(string title, string author, bool hardback, BookState bookState)
         {
-            throw new System.NotImplementedException();
         }
 
         public void SelectBook(string title, string author, bool hardback, BookState bookState, string ownerUsername)
         {
-            throw new System.NotImplementedException();
         }
 
         public void SelectUser(string username)
         {
-            throw new System.NotImplementedException();
         }
 
         public void UnassignTheBook()
         {
-            throw new System.NotImplementedException();
+        }
+
+        List<Book> ILibrary.GetBookList()
+        {
+            return bookList;
+        }
+
+        List<Event> ILibrary.GetEvents()
+        {
+            return eventHistory;
         }
     }
 

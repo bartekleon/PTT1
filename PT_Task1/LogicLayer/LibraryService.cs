@@ -14,7 +14,7 @@ namespace PT_Task1.LogicLayer
 
         public LibraryService(ILibrary library)
         {
-            this.library = new Library();
+            this.library = library;
         }
 
         public void Login(string username)
@@ -86,8 +86,6 @@ namespace PT_Task1.LogicLayer
                 throw new LimitBreached_Exception();
             }
         }
-
-
 
         public void ReturnBook()
         {

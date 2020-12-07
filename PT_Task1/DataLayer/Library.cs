@@ -262,19 +262,15 @@ namespace PT_Task1.DataLayer
             return Catalog.entries.Count;
         }
 
-        public static implicit operator Library(global::Task1_Test.LibraryTest v)
+        List<Event> ILibrary.GetEvents()
         {
-            throw new NotImplementedException();
+            return eventHistory;
         }
 
-        public static implicit operator Library(global::Task1_Test.LibraryTest v)
+        List<Book> ILibrary.GetBookList()
         {
-            throw new NotImplementedException();
+            return bookList;
         }
 
-        public static implicit operator Library(global::Task1_Test.LibraryTest v)
-        {
-            throw new NotImplementedException();
-        }
     }
 }

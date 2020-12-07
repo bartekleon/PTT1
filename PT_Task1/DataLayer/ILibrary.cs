@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Collections.Generic;
 
 namespace PT_Task1.DataLayer
 {
@@ -48,5 +49,8 @@ namespace PT_Task1.DataLayer
         public void PassTheBookDownTheQueue();
 
         public void LogEvent(EventType type);
+
+        internal List<Event> GetEvents();
+        internal List<Book> GetBookList();
     }
 }
