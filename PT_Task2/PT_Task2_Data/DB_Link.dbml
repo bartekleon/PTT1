@@ -1,0 +1,20 @@
+﻿<?xml version="1.0" encoding="utf-8"?><Database Name="DB" Class="DB_LinkDataContext" xmlns="http://schemas.microsoft.com/linqtosql/dbml/2007">
+  <Connection Mode="AppSettings" ConnectionString="Data Source=(LocalDB)\MSSQLLocalDB;AttachDbFilename=|DataDirectory|\DB.mdf;Integrated Security=True;Connect Timeout=30" SettingsObjectName="PT_Task2_Data.Properties.Settings" SettingsPropertyName="DBConnectionString" Provider="System.Data.SqlClient" />
+  <Table Name="dbo.Books" Member="Books">
+    <Type Name="Books">
+      <Column Name="bookID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="entryID" Type="System.Int32" DbType="Int" CanBeNull="true" />
+      <Column Name="bookState" Type="System.String" DbType="VarChar(10)" CanBeNull="true" />
+      <Association Name="Catalog_Books" Member="Catalog" ThisKey="entryID" OtherKey="entryID" Type="Catalog" IsForeignKey="true" />
+    </Type>
+  </Table>
+  <Table Name="dbo.Catalog" Member="Catalog">
+    <Type Name="Catalog">
+      <Column Name="entryID" Type="System.Int32" DbType="Int NOT NULL" IsPrimaryKey="true" CanBeNull="false" />
+      <Column Name="title" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="author" Type="System.String" DbType="VarChar(255)" CanBeNull="true" />
+      <Column Name="hardback" Type="System.Boolean" DbType="Bit" CanBeNull="true" />
+      <Association Name="Catalog_Books" Member="Books" ThisKey="entryID" OtherKey="entryID" Type="Books" />
+    </Type>
+  </Table>
+</Database>
