@@ -1,6 +1,4 @@
-﻿using System;
-
-namespace PT_Task2_ServiceTest.Instrumentation
+﻿namespace PT_Task2_ServiceTest.Instrumentation
 {
     internal class TestingDataGenerator
     {
@@ -8,7 +6,6 @@ namespace PT_Task2_ServiceTest.Instrumentation
         {
             db.TruncateBoth();
             db.SubmitToDatabase();
-            //Console.WriteLine(db.GetCatalogLength());
 
             db.InsertCatalogEntry("Harry Potter and the Philosopher's Stone", "J. K. Rowling", true);
             db.InsertCatalogEntry("On the Bright Side", "Hendrik Groen", false);

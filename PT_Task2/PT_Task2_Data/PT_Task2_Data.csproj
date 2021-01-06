@@ -59,7 +59,6 @@
     <Reference Include="System.Xml" />
   </ItemGroup>
   <ItemGroup>
-    <Compile Include="ConnectionStringProvider.cs" />
     <Compile Include="DB_Link.designer.cs">
       <AutoGen>True</AutoGen>
       <DesignTime>True</DesignTime>

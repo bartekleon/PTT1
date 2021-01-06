@@ -8,9 +8,7 @@ namespace PT_Task2_Test
     public class ServiceTest
 
     {
-        private readonly DataOperator db = new DataOperator("Data Source=(LocalDB)\\MSSQLLocalDB;"
-            + "AttachDbFilename=|DataDirectory|\\Instrumentation\\DB.mdf;"
-            + "Integrated Security=True;Connect Timeout=30");
+        private readonly DataOperator db = new DataOperator("PT_Task2_ServiceTest\\Instrumentation\\DB.mdf");
 
         [TestInitialize]
         public void BeforeEach()
@@ -51,9 +49,14 @@ namespace PT_Task2_Test
             int index = db.LookUpEntryIDByTitle("Pride and Prejudice");
             Assert.AreNotEqual("Definitely not me", db.GetAuthorOfEntry(index));
 
-            db.UpdateCatalogEntry(index, db.GetTitleOfEntry(index), "Definitely not me", false);
+            db.UpdateCatalogEntryWithAuthor(index, "Definitely not me");
             db.SubmitToDatabase();
             Assert.AreEqual("Definitely not me", db.GetAuthorOfEntry(index));
+        }
+
+        [TestMethod]
+        public void DummyTest()
+        {
         }
     }
 }

@@ -10,11 +10,31 @@ namespace PT_Task2_Services
 
         protected DB_LinkDataContext context;
 
-        public DataOperator(string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;"
-            + "AttachDbFilename=|DataDirectiory|\\DB.mdf;"
-            + "Integrated Security=True;Connect Timeout=30")
+        public DataOperator(string pathToDB = null)
         {
+            string fullPath = System.IO.Directory.GetCurrentDirectory();
+            int carefa = fullPath.IndexOf("\\PT_Task2\\");
+            fullPath = fullPath.Substring(0, carefa + 10);
+
+            if (pathToDB == null)
+            {
+                fullPath += "PT_Task2_Data\\DB.mdf";
+            }
+            else
+            {
+                fullPath += pathToDB;
+            }
+            string connectionString = "Data Source=(LocalDB)\\MSSQLLocalDB;";
+            connectionString += "AttachDbFilename=";
+            connectionString += fullPath;
+            connectionString += ";Integrated Security=True;Connect Timeout=30";
+
             this.context = new DB_LinkDataContext(connectionString);
+        }
+
+        public bool DoesEntryExists(int index)
+        {
+            return context.Catalog.Any(entry => entry.entryID == index);
         }
 
         public string GetTitleOfEntry(int index)
@@ -166,11 +186,21 @@ namespace PT_Task2_Services
             }
         }
 
-        public void UpdateCatalogEntry(int entryID, string newTitle, string newAuthor, bool newHardback)
+        public void UpdateCatalogEntryWithTitle(int entryID, string newTitle)
         {
             Catalog entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
             entryToUpdate.title = newTitle;
+        }
+
+        public void UpdateCatalogEntryWithAuthor(int entryID, string newAuthor)
+        {
+            Catalog entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
             entryToUpdate.author = newAuthor;
+        }
+
+        public void UpdateCatalogEntryWithHardback(int entryID, bool newHardback)
+        {
+            Catalog entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
             entryToUpdate.hardback = newHardback;
         }
 
