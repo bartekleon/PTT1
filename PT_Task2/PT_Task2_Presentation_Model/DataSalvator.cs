@@ -22,6 +22,14 @@ namespace PT_Task2_Presentation_Model
                 }
             }
         }
+        internal static void AddBookOfEntry(int entryId)
+        {
+            db.InsertBook(entryId);
+        }
+        internal static void RemoveBookOfEntry(int entryId)
+        {
+            db.DeleteBook(entryId);
+        }
 
         public static void SaveToDatabase()
         {

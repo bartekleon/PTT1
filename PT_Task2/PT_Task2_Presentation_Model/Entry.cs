@@ -34,5 +34,14 @@
         {
             return Title + " " + Author + " " + BookCount;
         }
+
+        public void AddSuchBook()
+        {
+            DataSalvator.AddBookOfEntry(Index);
+        }
+        public void RemoveSuchBook()
+        {
+            DataSalvator.RemoveBookOfEntry(Index);
+        }
     }
 }

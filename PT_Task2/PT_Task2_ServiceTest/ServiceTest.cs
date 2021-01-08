@@ -55,8 +55,84 @@ namespace PT_Task2_Test
         }
 
         [TestMethod]
+        public void SQLDeleteAndInsertTest()
+        {
+            int count = db.GetCatalogLength();
+            db.DeleteCatalogEntry(db.LookUpEntryIDByTitle("Harry Potter and the Philosopher's Stone"));
+            db.InsertCatalogEntry("Harry Potter and the Philosopher's Stone", "J. K. Bowling", false);
+            db.SubmitToDatabase();
+
+            Assert.AreEqual(count, db.GetCatalogLength());
+        }
+
+        [TestMethod]
+        public void SQLInsertAndDeleteTest()
+        {
+            int count = db.GetCatalogLength();
+            db.InsertCatalogEntry("Harry Potter and the Philosopher's Stone", "J. K. Bowling", false);
+            db.DeleteCatalogEntry(db.LookUpEntryIDByTitle("Harry Potter and the Philosopher's Stone"));
+            db.SubmitToDatabase();
+
+            Assert.AreEqual(count, db.GetCatalogLength());
+        }
+
+        [TestMethod]
+        public void SQLInsertBookTest()
+        {
+            int count = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            int otherCount = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side"));
+            db.InsertBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.SubmitToDatabase();
+
+            Assert.AreEqual(count + 1, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice")));
+            Assert.AreEqual(otherCount, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side")));
+        }
+
+        [TestMethod]
+        public void SQLDeleteBookTest()
+        {
+            int count = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            int otherCount = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side"));
+            db.DeleteBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.DeleteBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.SubmitToDatabase();
+
+            Assert.AreEqual(count - 2, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice")));
+            Assert.AreEqual(otherCount, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side")));
+        }
+
+        [TestMethod]
+        public void SQLDeleteAndInsertBookTest()
+        {
+            int count = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            int otherCount = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side"));
+            db.DeleteBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.InsertBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.SubmitToDatabase();
+
+            Assert.AreEqual(count, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice")));
+            Assert.AreEqual(otherCount, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side")));
+        }
+
+        [TestMethod]
+        public void SQLInsertAndDeleteBookTest()
+        {
+            int count = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            int otherCount = db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side"));
+            db.InsertBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.DeleteBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.DeleteBook(db.LookUpEntryIDByTitle("Pride and Prejudice"));
+            db.SubmitToDatabase();
+
+            Assert.AreEqual(count - 1, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice")));
+            Assert.AreEqual(otherCount, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side")));
+        }
+
+        /*
+        [TestMethod]
         public void DummyTest()
         {
-        }
+            DataOperator dbr = new DataOperator();
+        }*/
     }
 }

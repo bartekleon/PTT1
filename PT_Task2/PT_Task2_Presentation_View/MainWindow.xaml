@@ -36,13 +36,22 @@
                 <RowDefinition/>
                 <RowDefinition/>
             </Grid.RowDefinitions>
-            <TextBox Text="{Binding HighlightedEntry.Title}" Grid.Column="0" Grid.Row="0" />
-            <TextBox Text="{Binding HighlightedEntry.Author}" Grid.Column="0" Grid.Row="1" />
-            <TextBox Text="{Binding HighlightedEntry.BookCount}" Grid.Column="0" Grid.Row="2" />
+            <TextBox Text="{Binding HighlightedEntry.Title}" TextAlignment="Center" VerticalContentAlignment="Center" Grid.Column="0" Grid.Row="0" />
+            <TextBox Text="{Binding HighlightedEntry.Author}" TextAlignment="Center" VerticalContentAlignment="Center" Grid.Column="0" Grid.Row="1" />
+            <Grid Grid.Row="3">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                    <ColumnDefinition/>
+                </Grid.ColumnDefinitions>
+                <Button Content="-" Grid.Column="0" Command="{Binding DecreaseBookCountCommand}"/>
+                <Label Content="{Binding HighlightedEntry.BookCount}" Grid.Column="1" VerticalContentAlignment="Center" HorizontalContentAlignment="Center"/>
+                <Button Content="+" Grid.Column="2" Command="{Binding IncreaseBookCountCommand}"/>
+            </Grid>
         </Grid>
         <Button Content="Click the button to load new data" Grid.Column="0" Grid.Row="1" Command="{Binding FetchDataCommand}"/>
         <Button Content="Click the save data to the database" Grid.Column="0" Grid.Row="2" Width="Auto" Command="{Binding SaveDataCommand}"/>
         <Button Content="Click to display console trace" Grid.Column="1" Grid.Row="1" Command="{Binding ConsoleTraceCommand}"/>
-        <Label Content="{Binding FeedbackMessage}" Grid.Column="1" Grid.Row="2"/>
+        <Label Content="{Binding FeedbackMessage}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Grid.Row="2"/>
     </Grid>
 </Window>

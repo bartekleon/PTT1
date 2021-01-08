@@ -14,7 +14,10 @@ namespace PT_Task2_Presentation
             FetchDataCommand = new RelayCommand(FetchData);
             ConsoleTraceCommand = new RelayCommand(DoConsoleTrace, () => !(Entries == null));
             SaveDataCommand = new RelayCommand(SendDataBack);
-
+            IncreaseBookCountCommand = new RelayCommand(IncreaseBookCount,
+                () => !(HighlightedEntry == null));
+            DecreaseBookCountCommand = new RelayCommand(DecreaseBookCount,
+                () => ((!(HighlightedEntry == null)) && HighlightedEntry.BookCount > 0));
         }
 
         #region command methods
@@ -41,8 +44,24 @@ namespace PT_Task2_Presentation
             if (Entries.Count > 0)
             {
                 HighlightedEntry = Entries[0];
+                IncreaseBookCountCommand.RaiseCanExecuteChanged();
+                DecreaseBookCountCommand.RaiseCanExecuteChanged();
             };
             DataSalvator.switchedOn = true;
+        }
+        private void IncreaseBookCount()
+        {
+            HighlightedEntry.BookCount++;
+            HighlightedEntry.AddSuchBook();
+            RaisePropertyChanged("HighlightedEntry");
+            DecreaseBookCountCommand.RaiseCanExecuteChanged();
+        }
+        private void DecreaseBookCount()
+        {
+            HighlightedEntry.BookCount--;
+            HighlightedEntry.RemoveSuchBook();
+            RaisePropertyChanged("HighlightedEntry");
+            DecreaseBookCountCommand.RaiseCanExecuteChanged();
         }
         #endregion
 
@@ -79,6 +98,7 @@ namespace PT_Task2_Presentation
             {
                 m_HighlightedEntry = value;
                 RaisePropertyChanged();
+                DecreaseBookCountCommand.RaiseCanExecuteChanged();
             }
         }
         #endregion
@@ -93,6 +113,14 @@ namespace PT_Task2_Presentation
             get; private set;
         }
         public RelayCommand SaveDataCommand
+        {
+            get; private set;
+        }
+        public RelayCommand IncreaseBookCountCommand
+        {
+            get; private set;
+        }
+        public RelayCommand DecreaseBookCountCommand
         {
             get; private set;
         }

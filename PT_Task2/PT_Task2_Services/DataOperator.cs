@@ -10,6 +10,8 @@ namespace PT_Task2_Services
 
         protected DB_LinkDataContext context;
 
+        private IList<int> PendingBookDeletes = new List<int>();
+
         public DataOperator(string pathToDB = null)
         {
             string fullPath = System.IO.Directory.GetCurrentDirectory();
@@ -166,18 +168,28 @@ namespace PT_Task2_Services
             if (context.Catalog.Any(entry => entry.entryID == entryID))
             {
                 IEnumerable<Books> inserts = context.GetChangeSet().Inserts.OfType<Books>();
-                int maxInsertID;
+                IEnumerable<Books> deletes = context.GetChangeSet().Inserts.OfType<Books>();
+                int maxBookID = -1;
                 try
                 {
-                    maxInsertID = inserts.Last().bookID;
+                    int maxInsertID = inserts.Max(book => book.bookID);
+                    maxBookID = Math.Max(maxInsertID, maxBookID);
                 }
-                catch
+                catch { }
+                try
                 {
-                    maxInsertID = -1;
+                    int maxDeleteID = deletes.Max(book => book.bookID);
+                    maxBookID = Math.Max(maxDeleteID, maxBookID);
                 }
+                catch { }
+                try {
+                    int maxCurrentID = context.Books.Max(book => book.bookID);
+                    maxBookID = Math.Max(maxCurrentID, maxBookID);
+                }
+                catch { }
                 Books newBook = new Books
                 {
-                    bookID = Math.Max(GetBookCount(), maxInsertID + 1),
+                    bookID = maxBookID + 1,
                     entryID = entryID,
                     bookState = "available"
                 };
@@ -219,6 +231,11 @@ namespace PT_Task2_Services
 
         public void DeleteBook(int entryID)
         {
+            PendingBookDeletes.Add(entryID);
+        }
+
+        public void DeleteBookAndSubmit(int entryID)
+        {
             IEnumerable<Books> booksToDelete = from book in context.Books
                                                where book.entryID == entryID && book.bookState == "available"
                                                select book;
@@ -228,7 +245,8 @@ namespace PT_Task2_Services
                                 where book.entryID == entryID
                                 select book;
             }
-            context.Books.DeleteOnSubmit(booksToDelete.First());
+            if (booksToDelete.Count() > 0) context.Books.DeleteOnSubmit(booksToDelete.First());
+            context.SubmitChanges();
         }
 
         public void TruncateBooks()
@@ -246,9 +264,19 @@ namespace PT_Task2_Services
             context.SubmitChanges();
         }
 
+        public void RetrofitData()
+        {
+            foreach (int entryID in PendingBookDeletes)
+            {
+                this.DeleteBookAndSubmit(entryID);
+            }
+            PendingBookDeletes.Clear();
+        }
+
         public void SubmitToDatabase()
         {
             context.SubmitChanges();
+            this.RetrofitData();
         }
     }
 }
