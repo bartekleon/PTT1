@@ -12,40 +12,58 @@ namespace PT_Task2_Presentation
         public MyemViewModel()
         {
             FetchDataCommand = new RelayCommand(FetchData);
-            ConsoleTraceCommand = new RelayCommand(DoConsoleTrace, () => !(Entries == null));
             SaveDataCommand = new RelayCommand(SendDataBack);
             IncreaseBookCountCommand = new RelayCommand(IncreaseBookCount,
                 () => !(HighlightedEntry == null));
             DecreaseBookCountCommand = new RelayCommand(DecreaseBookCount,
-                () => ((!(HighlightedEntry == null)) && HighlightedEntry.BookCount > 0));
+                () => (!(HighlightedEntry == null)) && HighlightedEntry.BookCount > 0);
+            AddEntryCommand = new RelayCommand(AddEntry, () => !(Model == null));
+            DeleteEntryCommand = new RelayCommand(DeleteEntry, () => !(Entries == null));
+            ConsoleTraceCommand = new RelayCommand(ListEntries);
         }
 
         #region command methods
-        private void DoConsoleTrace()
+        private void DeleteEntry()
         {
-            foreach (Entry entry in Entries)
-            {
-                Console.WriteLine(entry.Title);
-                Console.WriteLine();
-            }
+            string remember = HighlightedEntry.Title;
+            DataSalvator.DeleteEntry(HighlightedEntry);
+            Entries.Remove(HighlightedEntry);
+            RaisePropertyChanged("Entries");
+            RaisePropertyChanged("HighlightedEntry");
+            ProvideFeedback("Deleted " + remember);
+
+        }
+        private void AddEntry()
+        {
+            DataSalvator.switchedOn = false;
+            Entries.Add(DataSalvator.NewEntry());
+            HighlightedEntry = Entries[Entries.Count - 1];
+
+            RaisePropertyChanged("Entries");
+            RaisePropertyChanged("HighlightedEntry");
+            DecreaseBookCountCommand.RaiseCanExecuteChanged();
+            DeleteEntryCommand.RaiseCanExecuteChanged();
+            ProvideFeedback("An entry added");
+            DataSalvator.switchedOn = true;
         }
         private void SendDataBack()
         {
             DataSalvator.SaveToDatabase();
-            m_FeedbackMessage = "Changes saved.";
-            RaisePropertyChanged("FeedbackMessage");
+            ProvideFeedback("Changes saved.");
         }
         private void FetchData()
         {
             DataSalvator.switchedOn = false;
+            DataSalvator.FlushChanges();
             Model = new DataModel();
-            ConsoleTraceCommand.RaiseCanExecuteChanged();
+            AddEntryCommand.RaiseCanExecuteChanged();
 
             if (Entries.Count > 0)
             {
                 HighlightedEntry = Entries[0];
                 IncreaseBookCountCommand.RaiseCanExecuteChanged();
                 DecreaseBookCountCommand.RaiseCanExecuteChanged();
+                DeleteEntryCommand.RaiseCanExecuteChanged();
             };
             DataSalvator.switchedOn = true;
         }
@@ -62,6 +80,16 @@ namespace PT_Task2_Presentation
             HighlightedEntry.RemoveSuchBook();
             RaisePropertyChanged("HighlightedEntry");
             DecreaseBookCountCommand.RaiseCanExecuteChanged();
+        }
+        public void ListEntries()
+        {
+            string list = String.Empty;
+            foreach (Entry entry in Entries)
+            {
+                list += entry.ToString();
+                list += ";   ";
+            }
+            ProvideFeedback(list);
         }
         #endregion
 
@@ -81,9 +109,8 @@ namespace PT_Task2_Presentation
             set
             {
                 m_Entries = value;
-                m_FeedbackMessage = "Loaded!";
                 RaisePropertyChanged();
-                RaisePropertyChanged("FeedbackMessage");
+                ProvideFeedback("Data loaded");
             }
         }
         public string FeedbackMessage
@@ -108,10 +135,6 @@ namespace PT_Task2_Presentation
         {
             get; private set;
         }
-        public RelayCommand ConsoleTraceCommand
-        {
-            get; private set;
-        }
         public RelayCommand SaveDataCommand
         {
             get; private set;
@@ -121,6 +144,18 @@ namespace PT_Task2_Presentation
             get; private set;
         }
         public RelayCommand DecreaseBookCountCommand
+        {
+            get; private set;
+        }
+        public RelayCommand AddEntryCommand
+        {
+            get; private set;
+        }
+        public RelayCommand DeleteEntryCommand
+        {
+            get; private set;
+        }
+        public RelayCommand ConsoleTraceCommand
         {
             get; private set;
         }
@@ -140,5 +175,11 @@ namespace PT_Task2_Presentation
         }
         public event PropertyChangedEventHandler PropertyChanged;
         #endregion
+
+        private void ProvideFeedback(string message)
+        {
+            m_FeedbackMessage = message;
+            RaisePropertyChanged("FeedbackMessage");
+        }
     }
 }

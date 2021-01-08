@@ -11,7 +11,8 @@ namespace PT_Task2_Presentation_Model
         public DataModel()
         {
             List<Entry> list = new List<Entry>();
-            for (int i = 0; i < db.GetCatalogLength(); i++)
+            int limit = db.GetCatalogLength();
+            for (int i = 0; i < limit; i++)
             {
                 if (db.DoesEntryExists(i))
                 {
@@ -23,6 +24,7 @@ namespace PT_Task2_Presentation_Model
                         Index = i
                     });
                 }
+                else limit++;
             }
             Data = list;
         }

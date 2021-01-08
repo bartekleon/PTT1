@@ -10,7 +10,9 @@ namespace PT_Task2_Services
 
         protected DB_LinkDataContext context;
 
-        private IList<int> PendingBookDeletes = new List<int>();
+        private readonly IList<int> PendingBookDeletes = new List<int>();
+        private readonly IList<int> PendingEntryDeletes = new List<int>();
+        private string connectionString;
 
         public DataOperator(string pathToDB = null)
         {
@@ -31,6 +33,7 @@ namespace PT_Task2_Services
             connectionString += fullPath;
             connectionString += ";Integrated Security=True;Connect Timeout=30";
 
+            this.connectionString = connectionString;
             this.context = new DB_LinkDataContext(connectionString);
         }
 
@@ -133,34 +136,32 @@ namespace PT_Task2_Services
             return booksFound.Count();
         }
 
-        public void InsertCatalogEntry(string title, string author, bool hardback)
+        public int InsertCatalogEntry(string title, string author, bool hardback)
         {
-            if (context.Catalog.Any(entry => entry.title == title && entry.author == author && entry.hardback == hardback))
+            IEnumerable<Catalog> inserts = context.GetChangeSet().Inserts.OfType<Catalog>();
+            int maxEntryID = -1;
+            try
             {
-                return;
+                int maxInsertID = inserts.Max(entry => entry.entryID);
+                maxEntryID = Math.Max(maxInsertID, maxEntryID);
             }
-            else
+            catch { }
+            try
             {
-                IEnumerable<Catalog> inserts = context.GetChangeSet().Inserts.OfType<Catalog>();
-                int maxInsertID;
-                try
-                {
-                    maxInsertID = inserts.Last().entryID;
-                }
-                catch
-                {
-                    maxInsertID = -1;
-                }
-                Catalog newEntry = new Catalog
-                {
-                    entryID = Math.Max(GetCatalogLength(), maxInsertID + 1),
-                    title = title,
-                    author = author,
-                    hardback = hardback
-                };
+                int maxCurrentID = context.Catalog.Max(entry => entry.entryID);
+                maxEntryID = Math.Max(maxCurrentID, maxEntryID);
+            }
+            catch { }
+            Catalog newEntry = new Catalog
+            {
+                entryID = maxEntryID + 1,
+                title = title,
+                author = author,
+                hardback = hardback
+            };
 
-                context.Catalog.InsertOnSubmit(newEntry);
-            }
+            context.Catalog.InsertOnSubmit(newEntry);
+            return newEntry.entryID;
         }
 
         public void InsertBook(int entryID)
@@ -182,7 +183,8 @@ namespace PT_Task2_Services
                     maxBookID = Math.Max(maxDeleteID, maxBookID);
                 }
                 catch { }
-                try {
+                try
+                {
                     int maxCurrentID = context.Books.Max(book => book.bookID);
                     maxBookID = Math.Max(maxCurrentID, maxBookID);
                 }
@@ -200,19 +202,43 @@ namespace PT_Task2_Services
 
         public void UpdateCatalogEntryWithTitle(int entryID, string newTitle)
         {
-            Catalog entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
+            Catalog entryToUpdate;
+            try
+            {
+                entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
+            }
+            catch (InvalidOperationException)
+            {
+                entryToUpdate = context.GetChangeSet().Inserts.OfType<Catalog>().Single(entry => entry.entryID == entryID);
+            }
             entryToUpdate.title = newTitle;
         }
 
         public void UpdateCatalogEntryWithAuthor(int entryID, string newAuthor)
         {
-            Catalog entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
+            Catalog entryToUpdate;
+            try
+            {
+                entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
+            }
+            catch (InvalidOperationException)
+            {
+                entryToUpdate = context.GetChangeSet().Inserts.OfType<Catalog>().Single(entry => entry.entryID == entryID);
+            }
             entryToUpdate.author = newAuthor;
         }
 
         public void UpdateCatalogEntryWithHardback(int entryID, bool newHardback)
         {
-            Catalog entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
+            Catalog entryToUpdate;
+            try
+            {
+                entryToUpdate = context.Catalog.Single(entry => entry.entryID == entryID);
+            }
+            catch (InvalidOperationException)
+            {
+                entryToUpdate = context.GetChangeSet().Inserts.OfType<Catalog>().Single(entry => entry.entryID == entryID);
+            }
             entryToUpdate.hardback = newHardback;
         }
 
@@ -224,9 +250,11 @@ namespace PT_Task2_Services
 
         public void DeleteCatalogEntry(int entryID)
         {
-            Catalog entryToDelete = context.Catalog.Single(entry => entry.entryID == entryID);
-            int count = GetCatalogLength();
-            context.Catalog.DeleteOnSubmit(entryToDelete);
+            PendingEntryDeletes.Add(entryID);
+            for (int i = 0; i < this.GetBookCountByEntry(entryID); i++)
+            {
+                PendingBookDeletes.Add(entryID);
+            };
         }
 
         public void DeleteBook(int entryID)
@@ -234,7 +262,7 @@ namespace PT_Task2_Services
             PendingBookDeletes.Add(entryID);
         }
 
-        public void DeleteBookAndSubmit(int entryID)
+        private void DeleteBookAndSubmit(int entryID)
         {
             IEnumerable<Books> booksToDelete = from book in context.Books
                                                where book.entryID == entryID && book.bookState == "available"
@@ -246,6 +274,13 @@ namespace PT_Task2_Services
                                 select book;
             }
             if (booksToDelete.Count() > 0) context.Books.DeleteOnSubmit(booksToDelete.First());
+            context.SubmitChanges();
+        }
+
+        private void DeleteEntryAndSubmit(int entryID)
+        {
+            Catalog entryToDelete = context.Catalog.Single(entry => entry.entryID == entryID);
+            context.Catalog.DeleteOnSubmit(entryToDelete);
             context.SubmitChanges();
         }
 
@@ -271,6 +306,17 @@ namespace PT_Task2_Services
                 this.DeleteBookAndSubmit(entryID);
             }
             PendingBookDeletes.Clear();
+
+            foreach (int entryID in PendingEntryDeletes)
+            {
+                this.DeleteEntryAndSubmit(entryID);
+            }
+            PendingEntryDeletes.Clear();
+        }
+
+        public void RefreshTheDatabase()
+        {
+            this.context = new DB_LinkDataContext(this.connectionString);
         }
 
         public void SubmitToDatabase()

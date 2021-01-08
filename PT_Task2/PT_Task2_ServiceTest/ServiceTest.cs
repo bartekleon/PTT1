@@ -133,6 +133,10 @@ namespace PT_Task2_Test
         public void DummyTest()
         {
             DataOperator dbr = new DataOperator();
+            dbr.TruncateBoth();
+            TestingDataGenerator.GenerateData(dbr);
+            dbr.InsertCatalogEntry("Stranger in a Strange Land", "Robert A. Heinlein", true);
+            dbr.SubmitToDatabase();
         }*/
     }
 }

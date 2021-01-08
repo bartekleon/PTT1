@@ -6,7 +6,7 @@
         xmlns:local="clr-namespace:PT_Task2_Presentation_View" 
         xmlns:vm="clr-namespace:PT_Task2_Presentation;assembly=PT_Task2_Presentation"
         mc:Ignorable="d"
-        Title="MainWindow" Height="450" Width="800">
+        Title="Welcome to our Baloon to the Moon!" Height="450" Width="800">
     <Window.DataContext>
         <vm:MyemViewModel/>
     </Window.DataContext>
@@ -17,6 +17,7 @@
         </Grid.ColumnDefinitions>
         <Grid.RowDefinitions>
             <RowDefinition Height="4*"/>
+            <RowDefinition/>
             <RowDefinition/>
             <RowDefinition/>
         </Grid.RowDefinitions>
@@ -49,9 +50,13 @@
                 <Button Content="+" Grid.Column="2" Command="{Binding IncreaseBookCountCommand}"/>
             </Grid>
         </Grid>
-        <Button Content="Click the button to load new data" Grid.Column="0" Grid.Row="1" Command="{Binding FetchDataCommand}"/>
-        <Button Content="Click the save data to the database" Grid.Column="0" Grid.Row="2" Width="Auto" Command="{Binding SaveDataCommand}"/>
-        <Button Content="Click to display console trace" Grid.Column="1" Grid.Row="1" Command="{Binding ConsoleTraceCommand}"/>
-        <Label Content="{Binding FeedbackMessage}" VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="1" Grid.Row="2"/>
+        <Button Content="Click the button to reload data" Grid.Column="1" Grid.Row="1" Command="{Binding FetchDataCommand}"/>
+        <Button Content="Click the save data to the database" Grid.Column="1" Grid.Row="2" Width="Auto" Command="{Binding SaveDataCommand}"/>
+        <Button Content="Click to delete this catalog entry" Grid.Column="0" Grid.Row="1" Command="{Binding DeleteEntryCommand}"/>
+        <Button Content="Click to add a new catalog entry" Grid.Column="0" Grid.Row="2" Command="{Binding AddEntryCommand}"/>
+        <Label VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
+            <TextBlock Text="{Binding FeedbackMessage}" TextWrapping="Wrap"/>
+        </Label>
+        <!--<Button Content="Click to print the console trace" Grid.Column="1" Grid.Row="3" Command="{Binding ConsoleTraceCommand}"/>-->
     </Grid>
 </Window>

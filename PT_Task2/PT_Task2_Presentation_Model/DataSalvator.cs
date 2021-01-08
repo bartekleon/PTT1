@@ -31,6 +31,27 @@ namespace PT_Task2_Presentation_Model
             db.DeleteBook(entryId);
         }
 
+        public static Entry NewEntry()
+        {
+            int index = db.InsertCatalogEntry("", "", true);
+            return new Entry()
+            {
+                Index = index,
+                Author = "",
+                Title = "",
+                BookCount = 0
+            };
+        }
+        public static void DeleteEntry(Entry entry)
+        {
+            db.DeleteCatalogEntry(entry.Index);
+        }
+
+        public static void FlushChanges()
+        {
+            db.RefreshTheDatabase();
+        }
+
         public static void SaveToDatabase()
         {
             db.SubmitToDatabase();

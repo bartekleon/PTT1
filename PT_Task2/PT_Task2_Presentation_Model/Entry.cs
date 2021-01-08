@@ -32,7 +32,7 @@
         internal int Index;
         public override string ToString()
         {
-            return Title + " " + Author + " " + BookCount;
+            return Index + ". " + Title + " " + Author + " " + BookCount;
         }
 
         public void AddSuchBook()
