@@ -18,6 +18,12 @@ Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PT_Task2_Presentation_ViewM
 EndProject
 Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PT_Task2_Presentation_Model", "PT_Task2_Presentation_Model\PT_Task2_Presentation_Model.csproj", "{B8ABCD76-8BAA-4ED7-88CB-3A58E6EFA48B}"
 EndProject
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PT_Task2_PresentationTest", "PT_Task2_PresentationTest\PT_Task2_PresentationTest.csproj", "{F57222FC-B398-475C-9835-4BEAE41736C3}"
+	ProjectSection(ProjectDependencies) = postProject
+		{E78E052B-817A-40AC-BACA-99E5B931A802} = {E78E052B-817A-40AC-BACA-99E5B931A802}
+		{B8ABCD76-8BAA-4ED7-88CB-3A58E6EFA48B} = {B8ABCD76-8BAA-4ED7-88CB-3A58E6EFA48B}
+	EndProjectSection
+EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
 		Debug|Any CPU = Debug|Any CPU
@@ -48,6 +54,10 @@ Global
 		{B8ABCD76-8BAA-4ED7-88CB-3A58E6EFA48B}.Debug|Any CPU.Build.0 = Debug|Any CPU
 		{B8ABCD76-8BAA-4ED7-88CB-3A58E6EFA48B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{B8ABCD76-8BAA-4ED7-88CB-3A58E6EFA48B}.Release|Any CPU.Build.0 = Release|Any CPU
+		{F57222FC-B398-475C-9835-4BEAE41736C3}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{F57222FC-B398-475C-9835-4BEAE41736C3}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{F57222FC-B398-475C-9835-4BEAE41736C3}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{F57222FC-B398-475C-9835-4BEAE41736C3}.Release|Any CPU.Build.0 = Release|Any CPU
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

@@ -5,7 +5,7 @@ namespace PT_Task2_Presentation_Model
     public static class DataSalvator
     {
         internal static DataOperator db = new DataOperator();
-        public static bool switchedOn = false;
+        public static bool switchedOn = true;
 
         internal static void UpdateRecord(int entryID, string newContent, string whichField)
         {
@@ -24,16 +24,17 @@ namespace PT_Task2_Presentation_Model
         }
         internal static void AddBookOfEntry(int entryId)
         {
-            db.InsertBook(entryId);
+            if (switchedOn) db.InsertBook(entryId);
         }
         internal static void RemoveBookOfEntry(int entryId)
         {
-            db.DeleteBook(entryId);
+            if (switchedOn) db.DeleteBook(entryId);
         }
 
         public static Entry NewEntry()
         {
             int index = db.InsertCatalogEntry("", "", true);
+            if (!switchedOn) db.DeleteCatalogEntry(index);
             return new Entry()
             {
                 Index = index,
@@ -44,17 +45,17 @@ namespace PT_Task2_Presentation_Model
         }
         public static void DeleteEntry(Entry entry)
         {
-            db.DeleteCatalogEntry(entry.Index);
+            if (switchedOn) db.DeleteCatalogEntry(entry.Index);
         }
 
         public static void FlushChanges()
         {
-            db.RefreshTheDatabase();
+            if (switchedOn) db.RefreshTheDatabase();
         }
 
         public static void SaveToDatabase()
         {
-            db.SubmitToDatabase();
+            if (switchedOn) db.SubmitToDatabase();
         }
     }
 }

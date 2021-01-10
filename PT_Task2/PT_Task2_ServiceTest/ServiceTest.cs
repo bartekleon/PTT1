@@ -127,16 +127,5 @@ namespace PT_Task2_Test
             Assert.AreEqual(count - 1, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("Pride and Prejudice")));
             Assert.AreEqual(otherCount, db.GetBookCountByEntry(db.LookUpEntryIDByTitle("On the Bright Side")));
         }
-
-        /*
-        [TestMethod]
-        public void DummyTest()
-        {
-            DataOperator dbr = new DataOperator();
-            dbr.TruncateBoth();
-            TestingDataGenerator.GenerateData(dbr);
-            dbr.InsertCatalogEntry("Stranger in a Strange Land", "Robert A. Heinlein", true);
-            dbr.SubmitToDatabase();
-        }*/
     }
 }

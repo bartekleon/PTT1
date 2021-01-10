@@ -19,7 +19,6 @@ namespace PT_Task2_Presentation
                 () => (!(HighlightedEntry == null)) && HighlightedEntry.BookCount > 0);
             AddEntryCommand = new RelayCommand(AddEntry, () => !(Model == null));
             DeleteEntryCommand = new RelayCommand(DeleteEntry, () => !(Entries == null));
-            ConsoleTraceCommand = new RelayCommand(ListEntries);
         }
 
         #region command methods
@@ -31,11 +30,9 @@ namespace PT_Task2_Presentation
             RaisePropertyChanged("Entries");
             RaisePropertyChanged("HighlightedEntry");
             ProvideFeedback("Deleted " + remember);
-
         }
         private void AddEntry()
         {
-            DataSalvator.switchedOn = false;
             Entries.Add(DataSalvator.NewEntry());
             HighlightedEntry = Entries[Entries.Count - 1];
 
@@ -44,7 +41,6 @@ namespace PT_Task2_Presentation
             DecreaseBookCountCommand.RaiseCanExecuteChanged();
             DeleteEntryCommand.RaiseCanExecuteChanged();
             ProvideFeedback("An entry added");
-            DataSalvator.switchedOn = true;
         }
         private void SendDataBack()
         {
@@ -53,7 +49,14 @@ namespace PT_Task2_Presentation
         }
         private void FetchData()
         {
-            DataSalvator.switchedOn = false;
+            bool wasSalvatorOn;
+            if (DataSalvator.switchedOn)
+            {
+                DataSalvator.switchedOn = false;
+                wasSalvatorOn = true;
+            }
+            else wasSalvatorOn = false;
+
             DataSalvator.FlushChanges();
             Model = new DataModel();
             AddEntryCommand.RaiseCanExecuteChanged();
@@ -65,7 +68,7 @@ namespace PT_Task2_Presentation
                 DecreaseBookCountCommand.RaiseCanExecuteChanged();
                 DeleteEntryCommand.RaiseCanExecuteChanged();
             };
-            DataSalvator.switchedOn = true;
+            if (wasSalvatorOn) DataSalvator.switchedOn = true;
         }
         private void IncreaseBookCount()
         {
@@ -80,16 +83,6 @@ namespace PT_Task2_Presentation
             HighlightedEntry.RemoveSuchBook();
             RaisePropertyChanged("HighlightedEntry");
             DecreaseBookCountCommand.RaiseCanExecuteChanged();
-        }
-        public void ListEntries()
-        {
-            string list = String.Empty;
-            foreach (Entry entry in Entries)
-            {
-                list += entry.ToString();
-                list += ";   ";
-            }
-            ProvideFeedback(list);
         }
         #endregion
 

@@ -57,6 +57,5 @@
         <Label VerticalContentAlignment="Center" HorizontalContentAlignment="Center" Grid.Column="0" Grid.ColumnSpan="2" Grid.Row="3">
             <TextBlock Text="{Binding FeedbackMessage}" TextWrapping="Wrap"/>
         </Label>
-        <!--<Button Content="Click to print the console trace" Grid.Column="1" Grid.Row="3" Command="{Binding ConsoleTraceCommand}"/>-->
     </Grid>
 </Window>
